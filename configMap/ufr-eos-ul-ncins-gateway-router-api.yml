@@ -1,0 +1,28 @@
+spring:
+  application.name: ufr-eos-ul-ncins-gateway-router-api
+  profiles.active: development
+  zipkin.enabled: false
+  jackson.default-property-ignore: ignore_unknown
+  deserialization.fail-on-unknown-properties: false
+
+ru.alfabank.ufr.gateway.router.kubernetes: true
+
+ru.alfabank.ufr:
+  clientsession:
+    legalentity:
+      url: ${integration-config.ufr.client-session-legal-entity-api.url}/session
+      getInfo:
+        endpoint: /get-info
+  gateway:
+    router:
+      kubernetes: true
+      applicationName: ufr-eos-ul-ncins-gateway-router-api
+      notSetSessionInfoPaths:
+        - /ufr-eos-ul-ncins-module-info-api/**
+        - /${integration-config.ufr.roles-model-api.host}/**
+        - /ufr-eos-ul-ncins-access-checker/**
+        - /ufr-eos-ul-ncins-core-api/swagger-ui/**
+        - /ufr-eos-ul-ncins-core-api/v3/api-docs/**
+      sessionHeaderFlow: true
+      sessionHeaderFlowPaths:
+        - /ufr-eos-ul-ncins-core-api/**

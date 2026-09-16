@@ -1,0 +1,273 @@
+spring:
+  application:
+  name: ufr-eos-ul-ncins-core-api
+  kafka:
+    bootstrap-servers: ${integration-config.kafka-bank-wide.bootstrap-servers}
+    properties:
+      security.protocol: SASL_SSL
+      sasl:
+        mechanism: PLAIN
+        jaas.config: 'org.apache.kafka.common.security.plain.PlainLoginModule required username="${KAFKA_BANK_WIDE_USR}" password="${KAFKA_BANK_WIDE_PWD}";'
+    producer:
+      acks: "all"
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      compression-type: zstd
+      retries: 10
+      delivery.timeout.ms: 120000
+      enable.idempotence: true
+      max.in.flight.requests.per.connection: 5
+      properties:
+        request.timeout.ms: 30000
+        reconnect.backoff.ms: 1000
+        reconnect.backoff.max.ms: 10000
+        max.block.ms: 60000
+        metadata.max.age.ms: 300000
+      topics:
+        to-ump-proc-from-sys: TO_UMP_PROC_FROM_SYS_TEST
+  jackson:
+    date-format: com.fasterxml.jackson.databind.util.ISO8601DateFormat
+    serialization:
+      write_dates_as_timestamps: false
+    deserialization:
+      fail-on-unknown-properties: false
+    default-property-inclusion: non_null
+  data:
+    redis:
+      maps:
+        accountsInfo:
+          ttl: 60m
+          value-serializer: JSON
+        managerInfo:
+          ttl: 60m
+          value-serializer: JSON
+        signInfo:
+          ttl: 60m
+          value-serializer: JSON
+        clientInfo:
+          ttl: 60m
+          value-serializer: JSON
+      default-value-serializer: JSON
+      failover-cache: false
+      global-prefix: 'ncins:core:api'
+      client-name: ${spring.application.name}
+      username: ${REDIS_COMMON_USR}
+      password: ${REDIS_COMMON_PWD}
+      cluster:
+        nodes:
+          - ${integration-config.redis.node_1}:${integration-config.redis.port}
+          - ${integration-config.redis.node_2}:${integration-config.redis.port}
+          - ${integration-config.redis.node_3}:${integration-config.redis.port}
+          - ${integration-config.redis.node_4}:${integration-config.redis.port}
+          - ${integration-config.redis.node_5}:${integration-config.redis.port}
+          - ${integration-config.redis.node_6}:${integration-config.redis.port}
+        max-redirects: 3
+      timeout: 5000ms
+      connect-timeout: 5000ms
+      lettuce:
+        shutdown-timeout: 100ms
+        cluster.refresh:
+          adaptive: true
+          period: 30s
+          dynamic-refresh-sources: true
+  cache:
+    type: redis
+    redis:
+      time-to-live: 60m
+
+integration:
+  nib:
+    corp-ncins-acc-api:
+      client-type: BACKEND
+      xpin-const: XAAAAA
+      channel-id: sfa
+      project-id: ncins
+  ufr:
+    sfa-core:
+      headers:
+        external-user-code: ${integration-config.ufr.sfa-core.headers.external-user-code}
+        registration-id: ${integration-config.ufr.sfa-core.headers.registration-id}
+    accounts-api:
+      url: ${integration-config.ufr.accounts-api.url}
+      filter:
+        enabled: true
+        allowed-currencies:
+          - RUR
+        allowed-account-types:
+          - CA
+        allowed-buh-modes:
+          - 100
+    customers-api:
+      url: ${integration-config.ufr.customers-api.url}
+    roles-model-api:
+      url: ${integration-config.ufr.roles-model-api.url}
+      access-role: ${integration-config.ufr.roles-model-api.access-role}
+    sign-engine-operation:
+      url: ${integration-config.ufr.sign-engine-operation.url}
+    doc-processing-operation:
+      url: ${integration-config.ufr.doc-processing-operation.url}
+      system-data:
+        time-zone: UTC
+
+ru:
+  alfabank:
+    obip:
+      userOBIP: ncins_user
+      passwordOBIP: ${PASSWORD_OBIP}
+      file-attributes:
+        operation: 1
+        formatFile: pdf
+        localeFile: ru-RU
+        templateFile: agreement
+        flattenXML: true
+        path: /NCINS/agreement/agreement.xdo
+        sizeOfDataChunkDownload: -1
+        isBarCode: false
+        processCode: 131
+        contentType: application/pdf
+        docType: NIBNCINS03
+        docTypeReport: NIBNCINS06
+        isTemp: true
+    alfa-capture:
+      systemCodeAC: NIBNCINS
+      passwordAC: ${PASSWORD_AC}
+    sign-online:
+      smsExternalSystemCode: EOSULB01
+      smsUserId: 2280
+      login: adNcins
+      password: ${PASSWORD_SO}
+      externalSystemCode: EOSULB01
+      prodType: non_credit_ins
+      channelId: SFA
+      chosenSignMethod: ses
+      chosenSignMethodType: full
+    ws:
+      userID: WSEF
+      branchNumber: 0000
+      externalSystemCode: EOSULB01
+      externalUserCode: NSSFA
+      login: test_eosul
+      password: ${PASSWORD_WS}
+
+feign:
+  oauth2.enabled: true
+  clients:
+    ump-api:
+      name: umpApplicationFacadeClient
+      url: ${integration-config.ump.application-facade.url}
+      retryer:
+        period: 100
+        maxPeriod: 1000
+        maxAttempts: 3
+      oauth2:
+        enabled: true
+        resource:
+          id: "ump-api"
+          grantType: client_credentials
+          clientId: ${SFA_UMP_CLIENT_ID}
+          clientSecret: ${SFA_UMP_CLIENT_SECRET}
+          scope: "offline_access"
+          accessTokenUri: ${integration-config.ump.keycloak.token-uri}
+    nib-api:
+      name: nibNcinsAccClient
+      url: ${integration-config.nib.corp-ncins-acc-api.url}
+      retryer:
+        period: 100
+        maxPeriod: 1000
+        maxAttempts: 3
+      oauth2:
+        enabled: true
+        resource:
+          id: "nib-api"
+          grantType: client_credentials
+          clientId: ${SFA_NIB_CLIENT_ID}
+          clientSecret: ${SFA_NIB_CLIENT_SECRET}
+          scope: "offline_access"
+          accessTokenUri: ${integration-config.nib.keycloak.token-uri}
+
+resilience4j:
+  retry:
+    instances:
+      default:
+        max-attempts: 3
+        wait-duration: 1s
+        retry-exceptions:
+          - ru.alfabank.ufr.ncins.core.api.exception.RetryExternalClientException
+        ignore-exceptions:
+          - ru.alfabank.ufr.ncins.core.api.exception.NotRetryExternalClientException
+
+springdoc:
+  server:
+    url: /ufr-eos-ul-ncins-gateway-router-api/ufr-eos-ul-ncins-core-api
+  swagger-ui:
+    url: /ufr-eos-ul-ncins-gateway-router-api/ufr-eos-ul-ncins-core-api/v3/api-docs
+    config-url: /ufr-eos-ul-ncins-gateway-router-api/ufr-eos-ul-ncins-core-api/v3/api-docs/swagger-config
+
+alfalab:
+  logging:
+    http:
+      servlet:
+        is-enabled: true
+      logger:
+        log-payload: true
+        pretty-print: true
+      logged-headers:
+        - actualName: Authorization
+          displayedName: auth_token
+        - actualName: A-customerId
+          displayedName: customerId
+      ignored-content-types:
+        - application/octet-stream
+        - application/pdf
+      ignoredUris:
+        - "/admin/health"
+        - "/v3/api-docs.*"
+        - "/webjars.*"
+        - "/swagger.*"
+    ws:
+      enabled: true
+      extended-logging-enabled: true
+    feign:
+      enable-one-log-per-message: true
+      is-enabled: true
+
+management:
+  metrics.distribution:
+    percentiles-histogram:
+      "[http.server.requests]": true
+  health:
+    livenessstate:
+      enabled: true
+    readinessstate:
+      enabled: true
+  endpoint:
+    health:
+      probes:
+        enabled: true
+  endpoints:
+    web:
+      base-path: /admin
+      exposure:
+        include: health,info,prometheus
+  tracing:
+    baggage:
+      enabled: true
+      remote-fields:
+        - A-userId
+        - A-customerId
+        - A-clientType
+        - A-channelId
+        - A-userIp
+        - A-projectId
+      correlation:
+        enabled: true
+        fields:
+          - A-userId
+          - A-customerId
+          - A-clientType
+          - A-channelId
+          - A-userIp
+          - A-projectId
+    propagation:
+      type: W3C, B3_MULTI
+    enabled: true

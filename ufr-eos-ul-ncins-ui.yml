@@ -1,0 +1,70 @@
+---
+manifest:
+  app:
+    namespace: "ufr-eos-ul-ncins"
+service_expose: true
+nodeSelector:
+  node-role.kubernetes.io/node: ''
+cluster: "ufrulkltmaster1.moscow.alfaintra.net"
+project:
+  service: "ufr-eos-ul-ncins-ui"
+  name: "ufr-eos-ul-ncins"
+replicaCounter: 2
+podAdditionalLabels:
+  networking.kubernetes.io/ufr-ui-loadbalancer: enabled
+  networking.kubernetes.io/ufr-api-loadbalancer: enabled
+  networking.kubernetes.io/ufr-ulk-api-loadbalancer: enabled
+  networking.kubernetes.io/keycloak: enabled
+  networking.kubernetes.io/redis-keycloak: enabled
+  networking.kubernetes.io/ufr-system: enabled
+  networking.kubernetes.io/role-model: enabled
+  networking.kubernetes.io/thrift: enabled
+
+containers:
+  registry: "eco.binary.alfabank.ru"
+  image: "ufr-eos-ul-ncins-ui"
+  tag: 1.0.1
+  runAsUser: 100
+  command:
+    - /bin/sh
+  args:
+    - ./start.sh
+  env:
+    CONTAINER_NAME: "ufr-eos-ul-ncins-ui"
+    NODE_ENV: "loading"
+    HOST: "lt.ufrulklt-ui.moscow.alfaintra.net"
+    NODE_EXTRA_CA_CERTS: "/ssl/trustca/combinedCA.pem"
+    UFR_EOS_UL_NCINS_UI_CONTEXT_ROOT: "/ufr-eos-ul-ncins-ui"
+    USE_ROLES_MODEL_PLUGIN: "enabled"
+    USE_KUBERNETES: "enabled"
+    IS_KUBERNETES: "enabled"
+    ENABLE_REDIS: "enabled"
+    CLIENT_SESSION_LEGAL_ENTITY_API_BASE_URL: "https://ufrulltmock1:8110/ufr-eos-ul-client-session-auth-gateway/secure/ufr-eos-ul-client-session-legal-entity-api"
+    ROLES_MODEL_API_LOADBALANCER: "https://ufrulltmock1:8110/ufr-rm-auth-gateway-api/secure"
+    KEYCLOAK_API: "http://ufrulltmock2:8188"
+    REDIRECT_HOST: "ufrulltmock1:8110"
+  resources:
+    requests:
+      memory: "256Mi"
+      cpu: "100m"
+    limits:
+      memory: "512Mi"
+      cpu: "1000m"
+  probes:
+    startupProbe:
+      httpGet:
+        path: /healthmonitor
+        port: http
+      failureThreshold: 30
+      periodSeconds: 10
+    livenessProbe:
+      httpGet:
+        path: /healthmonitor
+        port: http
+      failureThreshold: 1
+      periodSeconds: 10
+  secrets:
+    - name: "ufr-combined-ca-pem"
+      mountPath: "/ssl/trustca"
+      permissions: "444"
+...

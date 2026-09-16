@@ -1,0 +1,103 @@
+git.enabled: true
+
+integration-config.integration-list:
+  kafka:
+    kafka-bank-wide:
+      name: kafka-bank-wide
+      hostPort: ${integration-config.kafka-bank-wide.bootstrap-servers}
+      bootstrap_servers: ${integration-config.kafka-bank-wide.bootstrap-servers}
+      auth:
+        enabled: true
+        security_protocol: SASL_SSL
+        username: ${KAFKA_BANK_WIDE_USR}
+        password: ${KAFKA_BANK_WIDE_PWD}
+  keycloak:
+    keycloak-nib:
+      name: keycloak-nib
+      hostPort: ${integration-config.nib.host}:${integration-config.nib.port}
+      url: ${integration-config.nib.protocol}://${integration-config.nib.host}
+      realm: ${integration-config.nib.keycloak.realm}
+      token_uri: ${integration-config.nib.keycloak.token-uri}
+      keycloak_credentials:
+        grant_type: client_credentials
+        client_id: ${SFA_NIB_CLIENT_ID}
+        client_secret: ${SFA_NIB_CLIENT_SECRET}
+    keycloak-ump:
+      name: keycloak-ump
+      hostPort: ${integration-config.ump.keycloak.host}:${integration-config.ump.keycloak.port}
+      url: ${integration-config.ump.keycloak.protocol}://${integration-config.ump.keycloak.host}
+      realm: ${integration-config.ump.keycloak.realm}
+      token_uri: ${integration-config.ump.keycloak.token-uri}
+      keycloak_credentials:
+        grant_type: client_credentials
+        client_id: ${SFA_UMP_CLIENT_ID}
+        client_secret: ${SFA_UMP_CLIENT_SECRET}
+  telnet:
+    nib:
+      name: nib
+      hostPort: ${integration-config.nib.host}:${integration-config.nib.port}
+      uri: ${integration-config.nib.protocol}://${integration-config.nib.host}
+    ump:
+      name: ump
+      hostPort: ${integration-config.ump.host}:${integration-config.ump.port}
+      uri: ${integration-config.ump.protocol}://${integration-config.ump.host}
+    ufr-accounts-api:
+      name: ufr-accounts-api
+      hostPort: ${integration-config.ufr.accounts-api.host}:${integration-config.ufr.port}
+      uri: ${integration-config.ufr.protocol}://${integration-config.ufr.accounts-api.host}
+    ufr-roles-model-api:
+      name: ufr-roles-model-api
+      hostPort: ${integration-config.ufr.roles-model-api.host}:${integration-config.ufr.port}
+      uri: ${integration-config.ufr.protocol}://${integration-config.ufr.roles-model-api.host}
+    ufr-client-session-legal-entity-api:
+      name: ufr-client-session-legal-entity-api
+      hostPort: ${integration-config.ufr.client-session-legal-entity-api.host}:${integration-config.ufr.port}
+      uri: ${integration-config.ufr.protocol}://${integration-config.ufr.client-session-legal-entity-api.host}
+    ufr-eos-ul-sign-engine-operation-api:
+      name: ufr-eos-ul-sign-engine-operation-api
+      hostPort: ${integration-config.ufr.sign-engine-operation.host}:${integration-config.ufr.port}
+      url: ${integration-config.ufr.sign-engine-operation.protocol}://${integration-config.ufr.sign-engine-operation.host}
+    ufr-eos-ul-document-processing-operation-api:
+      name: ufr-eos-ul-document-processing-operation-api
+      host: ${integration-config.ufr.doc-processing-operation.host}:${integration-config.ufr.port}
+      url: ${integration-config.ufr.doc-processing-operation.protocol}://${integration-config.ufr.doc-processing-operation.host}
+    ufr-eos-ul-common-services-outbound-gateway-api:
+      name: ufr-eos-ul-common-services-outbound-gateway-api
+      host: ${integration-config.ufr.customers-api.host}:${integration-config.ufr.port}
+      url: ${integration-config.ufr.customers-api.protocol}://${integration-config.ufr.customers-api.host}
+    redis-node-1:
+      name: redis-node-1
+      hostPort: ${integration-config.redis.node_1}:${integration-config.redis.port}
+    redis-node-2:
+      name: redis-node-2
+      hostPort: ${integration-config.redis.node_2}:${integration-config.redis.port}
+    redis-node-3:
+      name: redis-node-3
+      hostPort: ${integration-config.redis.node_3}:${integration-config.redis.port}
+    redis-node-4:
+      name: redis-node-4
+      hostPort: ${integration-config.redis.node_4}:${integration-config.redis.port}
+    redis-node-5:
+      name: redis-node-5
+      hostPort: ${integration-config.redis.node_5}:${integration-config.redis.port}
+    redis-node-6:
+      name: redis-node-6
+      hostPort: ${integration-config.redis.node_6}:${integration-config.redis.port}
+    redisson-node-1:
+      name: redisson-node-1
+      hostPort: ${integration-config.redis.node_1}:${integration-config.redisson.port}
+    redisson-node-2:
+      name: redisson-node-2
+      hostPort: ${integration-config.redis.node_2}:${integration-config.redisson.port}
+    redisson-node-3:
+      name: redisson-node-3
+      hostPort: ${integration-config.redis.node_3}:${integration-config.redisson.port}
+    redisson-node-4:
+      name: redisson-node-4
+      hostPort: ${integration-config.redis.node_4}:${integration-config.redisson.port}
+    redisson-node-5:
+      name: redisson-node-5
+      hostPort: ${integration-config.redis.node_5}:${integration-config.redisson.port}
+    redisson-node-6:
+      name: redisson-node-6
+      hostPort: ${integration-config.redis.node_6}:${integration-config.redisson.port}

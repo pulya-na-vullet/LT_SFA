@@ -1,0 +1,65 @@
+integration-config:
+  nib:
+    protocol: https
+    host: corp-gateway-test.moscow.alfaintra.net
+    port: 443
+    corp-ncins-acc-api:
+      url: ${integration-config.nib.protocol}://${integration-config.nib.host}/corp-ncins-acc-gateway/secure/corp-ncins-acc-corp-ncins-acc-api
+    keycloak:
+      realm: corporate
+      token-uri: ${integration-config.nib.protocol}://${integration-config.nib.host}/mks-gateway/public/auth/realms/${integration-config.nib.keycloak.realm}/protocol/openid-connect/token
+  ump:
+    protocol: https
+    host: umptest.moscow.alfaintra.net
+    port: 443
+    application-facade:
+      url: ${integration-config.ump.protocol}://${integration-config.ump.host}/ump-application-facade
+    keycloak:
+      protocol: https
+      host: idp-api-test.alfaintra.net
+      realm: ump
+      port: 443
+      token-uri: ${integration-config.ump.keycloak.protocol}://${integration-config.ump.keycloak.host}/auth/realms/${integration-config.ump.keycloak.realm}/protocol/openid-connect/token
+  kafka-bank-wide:
+    bootstrap-servers: 172.16.15.171:9093,172.16.11.130:9093,172.16.11.138:9093
+  ufr:
+    protocol: http
+    port: 80
+    sfa-core:
+      headers:
+        external-user-code: NCINS
+        registration-id: sfaul-ncins
+    accounts-api:
+      host: ufr-eos-ul-common-services-outbound-gateway-api.ufr-eos-ul-common-services-int.svc.cluster.local
+      url: http://${integration-config.ufr.accounts-api.host}:80/sfa-core-gateway/secure/sfacore-accounts-fl/api
+    roles-model-api:
+      host: ufr-eos-ul-common-services-roles-model-api.ufr-eos-ul-common-services-int.svc.cluster.local
+      url: http://${integration-config.ufr.roles-model-api.host}:80
+      access-role: NCINS_UL_ACCESS
+    client-session-legal-entity-api:
+      host: ufr-eos-ul-client-session-legal-entity-api.ufr-eos-ul-client-session-int.svc.cluster.local
+      url: http://${integration-config.ufr.client-session-legal-entity-api.host}:80
+    sign-engine-operation:
+      protocol: http
+      host: ufr-eos-ul-sign-engine-operation-api.ufr-eos-ul-document-processing-int.svc.cluster.local
+      url: ${integration-config.ufr.sign-engine-operation.protocol}://${integration-config.ufr.sign-engine-operation.host}
+    doc-processing-operation:
+      protocol: http
+      host: ufr-eos-ul-document-processing-operation-api.ufr-eos-ul-document-processing-int.svc.cluster.local
+      url: ${integration-config.ufr.doc-processing-operation.protocol}://${integration-config.ufr.doc-processing-operation.host}
+    customers-api:
+      protocol: http
+      host: ufr-eos-ul-common-services-outbound-gateway-api.ufr-eos-ul-common-services-int.svc.cluster.local
+      path: sfa-core-gateway/secure/sfacore-clients-fl/customers-api
+      url: ${integration-config.ufr.customers-api.protocol}://${integration-config.ufr.customers-api.host}:80/${integration-config.ufr.customers-api.path}
+  redisson:
+    port: 6380
+  redis:
+    ssl_port: 6479
+    port: 6379
+    node_1: ufrulltredis1
+    node_2: ufrulltredis2
+    node_3: ufrulltredis3
+    node_4: ufrulltredis4
+    node_5: ufrulltredis5
+    node_6: ufrulltredis6

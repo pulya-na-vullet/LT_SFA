@@ -1,0 +1,37 @@
+feign.client.config:
+  clientSessionLegalEntityApiGateway:
+    errorDecoder: ru.alfabank.ufr.eos.moduleinfo.BadRequestExceptionDecoder
+
+spring:
+  autoconfigure.exclude:
+    - org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration
+    - org.redisson.spring.starter.RedissonAutoConfigurationV2
+    - org.springframework.boot.actuate.autoconfigure.tracing.zipkin.ZipkinAutoConfiguration
+
+ru.alfabank.ufr.moduleinfo:
+  module:
+    id: ncins
+    host: int.ufrulkint-ui.moscow.alfaintra.net
+    name: 'Страховки для бизнеса'
+    path: ufr-eos-ul-ncins-ui
+    protocol: https
+    description: |-
+      Полисы и страховые продукты
+    icon: 'shield'
+    showNotification: false
+    operations:
+      - access-ncins
+  operations:
+    - id: access-ncins
+      endpoint: /
+      name: 'Цифровое Страхование'
+      checkRoles: false
+      requiredSessionLevel: 1
+      permission: NCINS_UL_ACCESS
+
+ru.alfabank.ufr:
+  clientsession.legalentity:
+    url: ${integration-config.ufr.client-session-legal-entity-api.url}/session
+    getInfo.endpoint: /get-info
+  rolesmodel:
+    url: ${integration-config.ufr.roles-model-api.url}
