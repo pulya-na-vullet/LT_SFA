@@ -1,0 +1,585 @@
+НТ пререквизиты - Worker
+   ump-main-ma-ncins-pa
+
+                                      UMP
+
+                                             16 сентября, 2026
+                                                                                             UMP – НТ пререквизиты - Worker ump-main-ma-ncins-pa
+
+Table of Contents
+
+1 Согласование............................................................................................................................................. 3
+2 1. Минимальная информация для определения необходимости проведения НТ ......................... 4
+3 2. Полная информация для проведения НТ ......................................................................................... 5
+
+                                                                                                                                                                        2
+1 Согласование                  UMP – НТ пререквизиты - Worker ump-main-ma-ncins-pa
+                                                                     Статус
+  Аналитик
+  Забарянский Юрий Геннадьевич
+
+                                Согласование – 3
+                                                  UMP – НТ пререквизиты - Worker ump-main-ma-ncins-pa
+
+2 1. Минимальная информация для определения
+   необходимости проведения НТ
+
+Пререквизит                               Значение
+
+1 Описание алгоритма работы               [ump-main-ma-ncins-pa] - оркестратор по продукту
+       тестируемого метода                Некредитное страхование ЮЛ. После создания заявки
+                                          проходит в автоматическом режиме по всем дочерним
+                                          процессам (см. ump-ncins-pa1)
+
+2 SLA по времени отклика                  26 мин
+
+3 Частота планируемой нагрузки (ЧПН)      250 в час
+
+4 Прогнозируемая через полгода ЧПН        250 в час
+
+5 ЧПН на вызываемые внутри                250 в час
+       тестируемого метода другие методы
+       сервисов
+
+6 Прогнозируемая через полгода ЧПН на 250 в час
+       вызываемые внутри тестируемого
+       метода другие методы сервисов
+
+1. https://confluence.moscow.alfaintra.net/spaces/SMP/pages/3439530811/ump-ncins-pa
+
+                                                               1. Минимальная информация для определения необходимости проведения
+                                                                                                                                                                 НТ – 4
+                                  UMP – НТ пререквизиты - Worker ump-main-ma-ncins-pa
+
+3 2. Полная информация для проведения НТ
+
+Пререквизит Значение
+
+6 Пример кода POST /applications
+
+вызова                Создание заявки в UMP, которое запускает тестируемый процесс
+
+тестируемого
+
+метода
+
+сервиса               Мет
+                      од
+                            URL                                Тело запроса
+
+                      POST  https://ump.alfabank.ru/ump-       {
+                            application-facade/applications?    "externalApplicationIds": [
+                            finalVersion=true&fullCreate=true    {
+
+                                                                   "extAppId":
+                                                               "7ca85f64-5717-4562-
+                                                               b3fc-6c163f65aba9",
+
+                                                                   "systemCode": "NIB",
+                                                                   "extAppCreateDate":
+                                                               "2026-06-25T12:45:34.785
+                                                               179Z"
+                                                                 }
+                                                                ],
+                                                                "participants": [
+                                                                 {
+                                                                   "pin": "AAAXYX",
+                                                                   "type": "LEGAL",
+                                                                   "fullName": "ООО
+                                                               Звезда",
+                                                                   "inn": "123456789012",
+                                                                   "ogrn":
+                                                               "1027700061111",
+                                                                   "contacts": [
+                                                                    {
+
+                                                                      "type": "EMAIL",
+                                                                      "value":
+                                                               "romashka@rambler.ru2"
+                                                                    },
+                                                                    {
+                                                                      "type": "PHONE",
+                                                                      "value":
+                                                               "+79183221488"
+                                                                    }
+                                                                   ],
+                                                                   "addresses": [
+                                                                    {
+                                                                      "type": "FACT",
+                                                                      "address": {
+                                                                       "fullAddress": "Г.
+                                                               Пушкино ул.
+                                                               Колотушкина д. 14/88"
+                                                                      }
+
+2. http://rambler.ru
+
+                                  2. Полная информация для проведения НТ – 5
+Мет  URL  UMP – НТ пререквизиты - Worker ump-main-ma-ncins-pa
+од
+                                       Тело запроса
+
+                                            }
+                                           ]
+                                         }
+                                        ],
+                                        "products": [
+                                         {
+                                           "code":
+                                      "NON_CREDIT_INSURANC
+                                      E",
+                                           "type": "PRODUCT",
+                                           "salesChannel": {
+                                            "code": "NIB"
+                                           },
+                                           "productProperties": {
+                                         "code":
+                                      "NON_CREDIT_INSURANC
+                                      E",
+                                         "programId": 1,
+                                         "signDate":
+                                      "2026-06-25T11:47:13.570
+                                      Z",
+                                         "beginDate":
+                                      "2026-06-25T11:47:13.570
+                                      Z",
+                                         "endDate":
+                                      "2026-06-25T11:47:13.570
+                                      Z",
+                                         "duration": 12,
+                                         "paymentType":
+                                      "payment_account",
+                                         "contractNumber":
+                                      "Z6922/888/
+                                      ABR14883/6",
+                                         "insuranceSum": 20000,
+                                         "insurancePremium":
+                                      20000,
+                                         "agreementLink":
+                                      "1253245",
+                                         "debitAccount":
+                                      "123523464567347",
+                                         "insuranceObjects": [
+                                           {
+                                            "paymentAccount":
+                                      "123523464567347"
+                                           }
+                                         ]
+                                           }
+                                         }
+                                        ]
+                                      }
+
+          2. Полная информация для проведения НТ – 6
+                                  UMP – НТ пререквизиты - Worker ump-main-ma-ncins-pa
+
+              Параметр            Параметризация
+
+              @extAppId           рандомный uuid
+
+              @fullName           Рандомная строка
+
+              @inn                Рандомный ИНН
+
+              @contractNumber генерируем строго по маске Z6922/888/ABR*****/6, где
+                                           ***** начинается с 00001 и дальше прибавляется по 1
+
+7 Примеры     POST /applications
+
+кода ответа   Создание заявки в UMP, которое запускает тестируемый процесс
+
+тестируемого
+
+метода
+
+сервиса       Пример ответа
+
+                                  {
+                                   "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                                   "createDate": "2026-06-25T23:04:17.599Z",
+                                   "lastUpdateDate": "2026-06-25T23:04:17.599Z",
+                                   "number": "string",
+                                   "statusCode": "NEW",
+                                   "statusName": "string",
+                                   "statusMessage": "string",
+                                   "finalVersion": true,
+                                   "isDeleted": false,
+                                   "participants": [
+                                     {
+
+                                      "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                                      "pin": "AAAXYX",
+                                      "type": "LEGAL",
+                                      "fullName": "ООО Звезда",
+                                      "inn": "123456789012",
+                                      "ogrn": "1027700061111",
+                                      "contacts": [
+                                        {
+
+                                         "type": "EMAIL",
+                                         "value": "romashka@rambler.ru3"
+                                        },
+                                        {
+                                         "type": "PHONE",
+                                         "value": "+79183221488"
+                                        }
+                                      ],
+                                      "addresses": [
+                                        {
+                                         "type": "FACT",
+
+3. http://rambler.ru/
+
+                                                    2. Полная информация для проведения НТ – 7
+                                                                     UMP – НТ пререквизиты - Worker ump-main-ma-ncins-pa
+
+               Пример ответа
+
+                      "address": {
+                       "fullAddress": "Г. Пушкино ул. Колотушкина д. 14/88"
+                      }
+                    }
+                   ]
+                 }
+                ],
+                "products": [
+                 {
+                   "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                   "code": "NON_CREDIT_INSURANCE",
+                   "type": "PRODUCT",
+                   "salesChannel": {
+                    "code": "NIB"
+                   },
+                   "productProperties": {
+                   "programId": 1073741824,
+                 "signDate": "2026-06-25T11:47:13.570Z",
+                 "beginDate": "2026-06-25T11:47:13.570Z",
+                 "endDate": "2026-06-25T11:47:13.570Z",
+                 "duration": 12,
+                 "paymentType": "payment_account",
+                 "contractNumber": "Z6922/888/ABR14883/6",
+                 "insuranceSum": 20000,
+                 "insurancePremium": 20000,
+                 "agreementLink": "1253245",
+                 "insuranceObjects": [
+                   {
+                    "paymentAccount": "123523464567347"
+                   }
+                 ]
+                   }
+                 }
+                ]
+               }
+
+8 Изменяемые   Не требуется
+     данные в
+     рамках
+     работы
+     метода
+
+9 Скрипт,      Не требуется
+
+содержащий
+
+сопутствующ
+
+ие изменения
+
+в БД
+
+(миграция)
+
+                             2. Полная информация для проведения НТ – 8
+                                              UMP – НТ пререквизиты - Worker ump-main-ma-ncins-pa
+
+1 Заглушки для Удаление документов (процесс [ump-delete-documents-ncins-pa-ncins-pa] )
+
+0 внешних  Метод не реализован. в данный момент представляет собой одну сплошную
+
+зависимостей заглушку
+
+           Пример запроса
+
+           См. DeleteDocumentsService.java в проекте. Полная заглушка, которая всегда
+           возвращает ("status", "1")
+
+           Пример ответа
+
+           ("status", "1")
+
+           Заглушка внутри сервиса, от нас дополнительных работ не требуется
+
+           Установить холд по счету (процесс [ump-payment-ncins-pa])
+
+           Метод не реализован. в данный момент представляет собой одну сплошную
+           заглушку
+
+           Пример запроса
+
+           PaymentService.java4 внутри есть:
+           public SetHoldDto setHold(Map<String, Object> variables) { return new SetHoldDto(); //
+           TODO Временная заглушка → SUCCESS}
+
+           Пример ответа
+
+           {
+           "result": "SUCCESS",
+           }
+
+           Заглушка внутри сервиса, от нас дополнительных работ не требуется
+
+           Создать платежное поручение (процесс [ump-payment-ncins-pa])
+
+           Метод не реализован. в данный момент представляет собой одну сплошную
+           заглушку
+
+           Пример запроса
+
+           также есть в PaymentService.java5
+
+           Пример ответа
+
+           {
+           "result": "SUCCESS",
+           }
+
+           Передать управление. Подписание (процесс [ump-signing-documents-ncins-pa])
+           Отправляется сообщение в топик ump.process.to.system6
+
+           Пример запроса
+
+           Header:
+           systemCode: "NIB"
+
+4. https://paymentservice.java/
+5. https://paymentservice.java/
+6. https://confluence.moscow.alfaintra.net/spaces/SMP/pages/2464103648/ump-process-transfer-
+
+   connector+Передать+управление+контекст+системе+или+процессу+9df358f84668
+
+                                                                                                        2. Полная информация для проведения НТ – 9
+                                                                                             UMP – НТ пререквизиты - Worker ump-main-ma-ncins-pa
+
+                                body:
+                                {
+
+                                   "applicationId": "c6e96f1d-60eb-4a61-8846-2061e6060353",
+                                   "correlationKey":
+                                "c6e96f1d-60eb-4a61-8846-2061e6060353.NON_CREDIT_INSURANCE",
+                                   "messageName": "SigningDocs,
+                                   "variables": {
+                                    "inn": "1231234234",
+                                    "programId": 1
+                                   }
+                                }
+                                Маппинг
+                                applicationId= applicationId
+                                correlationKey составляется по маске: applicationId+"."+"NON_CREDIT_INSURANCE"
+                                messageName ВСЕГДА "SigningDocs"
+                                systemCode ВСЕГДА "NIB"
+                                Остальные параметры можно взять из примера и оставить статичными
+
+                                Получить управление, Подписание (процесс [ump-signing-documents-ncins-pa])
+                                Ожидается сообщение в топик ump.process.from.system7
+                                Пример запроса
+                                Header:
+                                systemCode: "NIB"
+                                body:
+                                { "messageName": "SigningDocs",
+                                "correlationKey": "1d462eee-1acf-406c-b07d-b4a3607f9741.NON_CREDIT_INSURANCE",
+                                "variables": {
+                                "agreementLink": "90542eee-1acf-406c-b07d-cca3607f958a",
+                                "id": "1d462eee-1acf-406c-b07d-b4a3607f9741"
+                                }
+                                }
+                                Маппинг
+                                correlationKey составляется по маске: applicationId+"."+"NON_CREDIT_INSURANCE"
+                                messageName ВСЕГДА "SigningDocs"
+                                systemCode ВСЕГДА "NIB"
+                                Остальные параметры можно взять из примера и оставить статичными
+                                Заглушка внутри сервиса, от нас дополнительных работ не требуется
+                                Получить сообщение о завершении оплаты (процесс [ump-payment-ncins-pa])
+                                Ожидается сообщение в топик ump.process.from.system8
+                                Пример запроса
+                                Header:
+                                systemCode: "NIB"
+                                body:
+                                { "messageName": "paymentFinished",
+                                "correlationKey": "1d462eee-1acf-406c-b07d-b4a3607f9741.NON_CREDIT_INSURANCE"
+                                }
+                                Маппинг
+
+7. https://confluence.moscow.alfaintra.net/spaces/SMP/pages/3344336898/ump.process.from.system+-
+   +Передача+управления+контекста+процессу+9292993a0950
+
+8. https://confluence.moscow.alfaintra.net/spaces/SMP/pages/3344336898/ump.process.from.system+-
+   +Передача+управления+контекста+процессу+9292993a0950
+
+                                                                                                      2. Полная информация для проведения НТ – 10
+                                                         UMP – НТ пререквизиты - Worker ump-main-ma-ncins-pa
+correlationKey составляется по маске: applicationId+"."+"NON_CREDIT_INSURANCE"
+messageName ВСЕГДА "paymentFinished"
+systemCode ВСЕГДА "NIB"
+Создать договор (в процессе [ump-finalisation-ncins-pa])
+Выполняется вызов создания договора (во внешней системе). Сервис таска сама
+подготавливает данные для запроса
+Пример запроса
+
+                                                                  2. Полная информация для проведения НТ – 11
+                                                                                             UMP – НТ пререквизиты - Worker ump-main-ma-ncins-pa
+
+                                POST https://int.ufrulkint-api.moscow.alfaintra.net/ufr-eos-ul-ncins-core-api/v1/ins-
+                                contracts
+                                {
+                                 "programId": 1489,
+                                 "signDate": "2026-08-02T21:08:36.218Z",
+                                 "beginDate": "2026-08-02T21:08:36.218Z",
+                                 "endDate": "2026-08-02T21:08:36.218Z",
+                                 "duration": 1,
+                                 "paymentType": "payment_account",
+                                 "contractNumber": "string",
+                                 "debitAccount": "string",
+                                 "insuranceSum": 0.1,
+                                 "insurancePremium": 0.1,
+                                 "sellerId": "string",
+                                 "sellerChannel": "SFA",
+                                 "contractLink": "string",
+                                 "policyLink": "string",
+                                 "agreementLink": "string",
+                                 "owner": {
+
+                                   "ownerId": "string",
+                                   "inn": "string",
+                                   "ogrn": "string",
+                                   "phoneNumber": "string",
+                                   "email": "user@example.com9",
+                                   "legalAddress": "string"
+                                 },
+                                 "insuranceObjects": [
+                                   {
+                                    "employeeFIO": "string",
+                                    "employeeEmail": "user@example.com10",
+                                    "employeePhoneNumber": "string",
+                                    "employeeBirthDate": "2026-08-02",
+                                    "paymentAccount": "string",
+                                    "cadastralNumber": "string",
+                                    "area": 0.1,
+                                    "realEstateAddress": "string",
+                                    "realEstateType": "COMMERCIAL"
+                                   }
+                                 ]
+                                }
+
+                                Пример ответа
+                                200 {"OK"}
+
+                                Сохранить документы в ЭА (процесс[ump-finalisation-ncins-pa] )
+                                Вызывается сервис Отправить документы в Электронный архив11
+                                Пример запроса
+
+9. http://example.com
+10. http://example.com
+11. https://confluence.moscow.alfaintra.net/spaces/SMP/pages/2187617975/
+
+    Отправить+документы+в+Электронный+архив+ЭА+06580f6cb6a7
+
+                                                                                                      2. Полная информация для проведения НТ – 12
+                                                                                             UMP – НТ пререквизиты - Worker ump-main-ma-ncins-pa
+
+                                curl -X 'POST' \
+                                 'https://ump.alfabank.ru/ump-documents/documents/archive' \
+                                 -H 'accept: application/json' \
+                                 -H 'Content-Type: application/json' \
+                                 -d '{
+                                 "acId": "b710a725-0647-4514-a146-5c0773fad69e"
+                                }'
+
+                                Пример ответа
+
+                                {
+                                "result": "SUCCESS",
+                                }
+
+                                Не является заглушкой, по сути просто вызов платформенного сервиса
+
+                                Формирование документов сохранение в ЭА (процесс [ump-prepare-documents-
+                                ncins-pa])
+                                Выполняется вызов сервиса [ump-generate-and-save-document-pa]12
+
+                                Пример запроса
+
+                                {
+                                "serviceId": "5094c2c5-f218-43cd-979b-495d2e34ae11",
+                                "serviceCode": "APPLICATION",
+                                "productCode": "NON_CREDIT_INSURANCE",
+                                "documents":
+                                [{"documentType":"CONTRACT_ACCOUNT_BLOCK","reportData":"PD94bWwgdmVyc2lvbj
+                                0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz48ZGF0YXNvdXJjZT48Y29udHJhY3ROdW1iZXI+
+                                WjY5MjIvODg4L0FCUjAwMTYwLzY8L2NvbnRyYWN0TnVtYmVyPjxjdXJyZW50RGF0ZT4
+                                yMDI2LTA3LTMwPC9jdXJyZW50RGF0ZT48ZnVsbE5hbWU+0J7QntCeINCX0LLQtdC30L
+                                TQsDwvZnVsbE5hbWU+PGlubj43ODI2Njg4NTc3PC9pbm4+PGVtYWlsPnJvbWFzaGthQ
+                                HJhbWJsZXIucnU8L2VtYWlsPjxwYXltZW50QWNjb3VudD4xMjM1MjM0NjQ1NjczNDc8L
+                                3BheW1lbnRBY2NvdW50PjxiZWdpbkRhdGU+MjAyNi0wNi0yNTwvYmVnaW5EYXRlPjxlb
+                                mREYXRlPjIwMjYtMDYtMjU8L2VuZERhdGU+PGluc3VyYW5jZVN1bT4yMDAwMC4wMD
+                                wvaW5zdXJhbmNlU3VtPjxpbnN1cmFuY2VQcmVtaXVtPjIwMDAwLjAwPC9pbnN1cmFu
+                                Y2VQcmVtaXVtPjwvZGF0YXNvdXJjZT4=","isWriteInEa":false}]
+                                }
+
+                                Пример ответа
+
+                                {
+                                "result": "SUCCESS",
+                                "acRequestId": "5094C2C5F21843CD20260730064436",
+                                "acDocuments":
+                                [{"acId":"2168d32c-6d10-4672-bd2e-
+                                e7bb3424dedb","type":"CONTRACT_ACCOUNT_BLOCK"}]
+                                }
+
+                                Маппинг
+
+                                <zeebe:ioMapping>
+                                <zeebe:input source="=businessKey" target="serviceId" />
+                                <zeebe:input source="=&#34;APPLICATION&#34;" target="serviceCode" />
+                                <zeebe:input source="=productCode" target="productCode" />
+                                <zeebe:input source="=documents" target="documents" />
+                                <zeebe:output source="=result" target="docsResult" />
+                                <zeebe:output source="=acRequestId" target="acRequestId" />
+                                <zeebe:output source="=acDocuments" target="acDocuments" />
+                                </zeebe:ioMapping>
+
+12. https://confluence.moscow.alfaintra.net/spaces/SMP/pages/2256399872/ump-generate-and-save-
+    document-pa+Формирование+и+сохранение+документа+в+AlfaCapture+1.0+fea6a2217930
+
+                                                                                                      2. Полная информация для проведения НТ – 13
+                                                   UMP – НТ пререквизиты - Worker ump-main-ma-ncins-pa
+
+            Не является заглушкой, по сути просто вызов платформенного сервиса
+
+1 Ожидаемое 1.Удаление документов - 0.5 сек
+
+1 время     2. Установить hold по счету - 0.5 сек
+
+отклика     3. Создать платежное поручение - 0.5 сек
+
+замоканных  4. Передать управление. Подписание - 0.5 сек
+
+внешних     5. Получить управление.Подписание - установить время ожидания 20 мин
+
+зависимостей 6. Получить сообщение о завершении оплаты - установить время ожидания 1 мин
+
+            7. Создать договор - 0.5 сек
+
+            8. Сохранить документы в Электронном архиве - 0.5 сек
+
+            9. Формирование документов сохранение в ЭА - 0.5 сек
+
+1 Сценарий  1. Вызвать метод создания заявки, используя параметризацию (см. п.6)
+
+2 тестирования 2. Использовать все заглушки из п.10
+
+            3.?????
+
+            4. PROFIT
+
+                                                      2. Полная информация для проведения НТ – 14
+

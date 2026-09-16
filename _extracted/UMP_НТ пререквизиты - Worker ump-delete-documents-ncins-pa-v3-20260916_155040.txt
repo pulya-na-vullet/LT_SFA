@@ -1,0 +1,596 @@
+   НТ пререквизиты - Worker
+ump-delete-documents-ncins-pa
+
+                                            UMP
+
+                                                      16 сентября, 2026
+                                                                                 UMP – НТ пререквизиты - Worker ump-delete-documents-ncins-pa
+
+Table of Contents
+
+1 Согласование............................................................................................................................................. 3
+2 1. Минимальная информация для определения необходимости проведения НТ ......................... 4
+3 2. Полная информация для проведения НТ (заполняется, только если получено заключение от
+
+  инженера о необходимости проведения НТ) ....................................................................................... 6
+4 3. Методы и примеры (код) ...................................................................................................................... 9
+
+                                                                                                                                                                        2
+1 Согласование                  UMP – НТ пререквизиты - Worker ump-delete-documents-ncins-pa
+                                                                                Статус
+  Аналитик
+  Забарянский Юрий Геннадьевич
+
+                                Согласование – 3
+                                              UMP – НТ пререквизиты - Worker ump-delete-documents-ncins-pa
+
+2 1. Минимальная информация для определения
+   необходимости проведения НТ
+
+Пререквизит            Значение               Пример             Где взять        Предпочтит
+                                                                                  ельная роль
+                                                                                  заполняюще
+                                                                                  го
+
+1 Описание             1) get-application-    DeleteDocuments    Ссылка на        Разработчик
+     алгоритма работы  data (DELETE_DOCS)     Worker + BPMN      алгоритм
+     тестируемого      →                                         работы метода
+     метода            documents[{docume                         в git или
+                       ntLink}] из contract/                     confluence.
+                       policy/agreement
+                       links
+                       2) ump-delete-
+                       documents-ncins-
+                       pa.delete-documents
+                       multiInstance
+                       sequential
+                       (inputCollection=doc
+                       uments,
+                       inputElement=docum
+                       ent,
+                       outputCollection=acD
+                       ocuments)
+                       DeleteDocumentsSer
+                       vice: TODO AC 1.0 —
+                       сейчас всегда
+                       status=1
+
+2 SLA по времени       Sync stub; время × N   несколько сек × N  Получить от      Аналитик
+     отклика           documents.                                заказчика
+                                                                 доработки.
+                                                                 Если заказчик
+                                                                 неизвестен,
+                                                                 определяем
+                                                                 экспертно.
+
+3 Частота              ~5% заявок ≈4–5/       15000×5%           Аналитику        Аналитик
+     планируемой       час.                                      нужно
+     нагрузки (ЧПН)                                              определить: 1)
+                                                                 макс вызовов/
+                                                                 час; 2) среднее
+                                                                 вызовов/час; 3)
+                                                                 способ
+                                                                 получения
+                                                                 оценки.
+
+                                 1. Минимальная информация для определения необходимости проведения
+                                                                                                                                   НТ – 4
+                                           UMP – НТ пререквизиты - Worker ump-delete-documents-ncins-pa
+
+4 Прогнозируемая      TBD                  TBD             Само НТ        Аналитик
+
+через полгода ЧПН                                          проводится по
+
+                                                           профилю
+
+                                                           прогнозируемо
+
+                                                           й через
+
+                                                           полгода ЧПН.
+
+5 ЧПН на              [GET applications]   AC HTTP в коде  Может          Аналитик
+     вызываемые       ~4–5                 ещё нет         совпадать с
+     внутри           [delete-documents                    ЧПН.
+     тестируемого     STUB / будущий AC
+     метода другие    deleteDocsh] ~4–5 ×
+     методы сервисов  N
+
+6 Прогнозируемая      TBD                  TBD             Может          Аналитик
+
+через полгода ЧПН                                          совпадать с
+
+на вызываемые                                              прогнозируемо
+
+внутри                                                     й через
+
+тестируемого                                               полгода ЧПН.
+
+метода другие
+
+методы сервисов
+
+                           1. Минимальная информация для определения необходимости проведения
+                                                                                                                             НТ – 5
+                                       UMP – НТ пререквизиты - Worker ump-delete-documents-ncins-pa
+
+3 2. Полная информация для проведения НТ
+   (заполняется, только если получено заключение от
+   инженера о необходимости проведения НТ)
+
+Пререквиз Значение                     Пример Где взять                        Предпочт
+ит                                                                             ительная
+                                                                               роль
+                                                                               заполня
+                                                                               ющего
+
+6 Пример  У воркера отсутствует        Map.of      Сначала нужно добыть        Тестиров
+                                       start/Call  живой пример вызова         щик
+кода      HTTP-эндпоинт.               Activity +  сервиса (локально/стенд) и
+                                       stub        параметризовать.
+вызова    Вызов происходит             delete      Параметризовать
+                                                   businessKey (≥ ЧПН).
+тестируемог напрямую в Camunda.                    productCode — const
+                                                   NON_CREDIT_INSURANCE.
+о метода  Camunda на базе Java                     Источник примеров:
+                                                   develop ump-ncins-pa
+сервиса   скрипта, инструкция —                    *WorkerIT + stubs.
+
+          https://
+
+          confluence.moscow.alfaintr
+
+          a.net/pages/
+
+          viewpage.action?
+
+          pageId=2136656813
+
+          Пример запроса:
+
+          Map<String, Object>
+          variables = Map.of(
+           "businessKey", "550e8400-
+          e29b-41d4-
+          a716-446655110003", // id
+          заявки (UMP application)
+           "productCode",
+          "NON_CREDIT_INSURANCE"
+          // const
+          );
+
+          final ProcessInstanceEvent
+          processInstanceEvent =
+          client
+           .newCreateInstanceComma
+          nd()
+           .bpmnProcessId("ump-
+          delete-documents-ncins-pa")
+           .latestVersion()
+           .variables(variables)
+           .send()
+           .join();
+
+          Параметры для запроса:
+          1. businessKey — UUID
+          заявки (параметризовать
+          на объём ≥ ЧПН)
+          2. productCode — const
+          NON_CREDIT_INSURANCE
+          (параметризация не
+          нужна)
+
+                                 2. Полная информация для проведения НТ (заполняется, только если
+                             получено заключение от инженера о необходимости проведения НТ) – 6
+                                          UMP – НТ пререквизиты - Worker ump-delete-documents-ncins-pa
+
+           Обычно стартует Call
+           Activity из main timeout (не
+           напрямую).
+
+           --- Шаги
+           (DeleteDocumentsWorkerIT)
+           ---
+
+           1) get-application-data
+           processType=DELETE_DOCS
+           Map.of("businessKey",
+           "550e8400-e29b-41d4-
+           a716-446655110000",
+           "processType",
+           "DELETE_DOCS");
+           HTTP: GET .../applications/
+           550e8400-e29b-41d4-
+           a716-446655110000?
+           include=PARTICIPANT&inclu
+           de=PRODUCT
+           → documents =
+           [{"documentLink": "<contract|
+           policy|agreement link>"}]
+
+           2) delete-documents
+           (multiInstance, каждый
+           document)
+           Map.of(
+            "businessKey", "550e8400-
+           e29b-41d4-
+           a716-446655110000",
+            "document",
+           "{ "documentLink": "https://
+           example.com/doc/123" }"
+           );
+           HTTP: отсутствует
+           (DeleteDocumentsService
+           TODO AC 1.0 stub)
+
+7 Примеры  Camunda out (IT):              {"docume     Нужны примеры ответов,      Разработч
+                                          ntRespons    которые можно считать       ик
+кода ответа { "documentResponse":         e":          ожидаемыми.
+                                          {"status":"  Например:
+тестируемог { "status": "1" } }           1"}}         getProcessParams=SUCCES
+                                                       S; HTTP 200/201;
+о метода                                               result=SUCCESS.
+                                                       Источник: *WorkerIT +
+сервиса    При exception в сервисе:                    stubs/ump/
+                                                       ump_application_response_2
+           { "documentResponse":                       00.json.
+
+           { "status": "2" } }
+
+           get-application-data:
+           getProcessParams =
+           SUCCESS | ERROR
+
+           Реальный AC deleteDocsh
+           request/response — TBD
+           после снятия stub
+           (как в образце п.7: если нет
+           — прогнать локально/стенд
+           и сохранить ответ).
+
+                                      2. Полная информация для проведения НТ (заполняется, только если
+                                  получено заключение от инженера о необходимости проведения НТ) – 7
+                                              UMP – НТ пререквизиты - Worker ump-delete-documents-ncins-pa
+
+8 Изменяемы      Сейчас stub — UMP DB не      нет         Перечислить поля/           Разработч
+     е данные в  меняется. После AC —         изменени    таблицы/ресурсы, которые    ик
+     рамках      удаление во внешней AC.      й UMP       создаются/
+     работы                                               перезаписываются (кроме
+     метода                                               логирования).
+
+9 Скрипт,        Нет необходимости            —           Опционально. Скрипт         Разработч
+                                                          готовит разработчик только  ик
+содержащи                                                 однажды перед боем.
+
+й
+
+сопутствую
+
+щие
+
+изменения
+
+в БД
+
+(миграция)
+
+1 Заглушки       Уже stub в коде. На НТ       DeleteDoc   Для зависимостей, которые   Разработч
+0 для            достаточно текущего мока     umentsSe    нужно/можно глушить —       ик
+                 до подключения AC.           rvice stub  прикрепить моки.
+     внешних
+     зависимост
+     ей
+
+1 Ожидаемое Stub ~мгновенно.                  ~0          Потребуется для имитации Разработч
+1 время
+                                                          нагрузки на внешние         ик
+     отклика
+     замоканных                                           зависимости.
+     внешних
+     зависимост
+     ей
+
+1 Сценарий       1) delete success status=1.  DeleteDoc   Опционально. Готовит        Аналитик
+2 тестирован     2) multiInstance несколько   umentsW     аналитик, если тестируется
+                 documentLink.                orkerIT     бизнес-процесс, а не
+     ия          3) после AC — негатив                    метод.
+                 невалидный UUID.
+
+                                        2. Полная информация для проведения НТ (заполняется, только если
+                                    получено заключение от инженера о необходимости проведения НТ) – 8
+                                                 UMP – НТ пререквизиты - Worker ump-delete-documents-ncins-pa
+
+4 3. Методы и примеры (код)
+
+Мето Где              Полный REQUEST             Полный RESPONSE (status + body) Источник
+д/                    (headers + body)
+JobW
+orker
+
+1 get- Applic GET /applications/                 HTTP/1.1 200 OK                             ApplicationDat
+
+appli ationD 6dc5daf3-                           Content-Type: application/json              aWorkerIT
+
+catio ataWor da12-4aae-9766-572da7b                                                          stubs/ump/
+
+n-     ker            6b003?                     {                                           ump_applicatio
+
+data все              include=PARTICIPANT&in "externalApplicationIds": [                     n_response_20
+
+GET / процес clude=PRODUCT HTTP/                        {                                    0.json
+
+appli сы              1.1                                  "extAppId": "7ca85f64-5717-4562-
+
+catio                 Host: ump-application-     b3fc-6c163f65aba9",
+
+ns/                   facade.ump.svc.cluster.lo            "systemCode": "SFA",
+
+{id}                  cal                                  "extAppCreateDate":
+
+                      Accept: application/json "2026-06-25T12:45:34.785179Z"
+
+                                                        }
+
+                      (без body)                    ],
+
+                                                    "channels": [
+
+                      Camunda job input:                {
+
+                      {                                    "id":
+
+                         "businessKey":          "bd458000-77c2-48af-91b4-815f7ef2
+
+                      "6dc5daf3-                 d4e6",
+
+                      da12-4aae-9766-572da7b               "userInfo": {
+
+                      6b003",                              "userId": "f6753df0-b5c9-4828-
+
+                         "processType":          a7b7-f9f3f7d8f33c",
+
+                      "<PREPARE_DOCUMENTS                  "login": "service-account-nib-
+
+                      |SIGNING|PAYMENT|          corp-ncins"
+
+                      FINALISATION|                        },
+
+                      DELETE_DOCS>"                        "code": "nib-corp-ncins",
+
+                      }                                    "name": "НИБ. Страхование",
+
+                                                           "isDeleted": false,
+
+                                                           "category": "RECEIVE",
+
+                                                           "type": "BANK_SYSTEM"
+
+                                                        }
+
+                                                    ],
+
+                                                    "participants": [
+
+                                                        {
+
+                                                           "id": "bdec62a5-e10a-4c5b-86c7-
+
+                                                 b5ac190b8055",
+
+                                                           "applicationId": "6dc5daf3-
+
+                                                 da12-4aae-9766-572da7b6b003",
+
+                                                           "isDeleted": false,
+
+                                                           "contacts": [
+
+                                                           {
+
+                                                               "type": "EMAIL",
+
+                                                               "typeName": "Email",
+
+                                                               "value":
+
+                                                 "romashka@rambler.ru1",
+
+                                                               "isPrimary": false
+
+                                                           },
+
+                                                           {
+
+1. http://rambler.ru
+
+                                                                                      3. Методы и примеры (код) – 9
+UMP – НТ пререквизиты - Worker ump-delete-documents-ncins-pa
+
+         "type": "PHONE",
+         "typeName": "Телефон",
+         "value": "79183221488",
+         "isPrimary": false
+        }
+      ],
+      "addresses": [
+        {
+         "type": "FACT",
+         "typeName": "Адрес
+  проживания / фактический -
+  краткий",
+         "address": {
+           "fullAddress": "Г. Пушкино ул.
+  Колотушкина д. 14/88"
+         }
+        }
+      ],
+      "identityDocuments": [],
+      "okveds": [],
+      "licenses": [],
+      "management": [],
+      "founders": [],
+      "externalPins": [],
+      "pin": "AAAXYX",
+      "type": "LEGAL",
+      "typeName": "Юридическое
+  лицо",
+      "fullName": "ООО Звезда",
+      "inn": "7826688577",
+      "createDate":
+  "2026-07-09T17:19:18.963685Z",
+      "lastUpdateDate":
+  "2026-07-09T17:19:19.99786Z",
+      "citizenship": "Россия",
+      "citizenshipCode": "RU",
+      "taxCountryCode": "RU",
+      "ogrn": "1027810281740"
+     }
+   ],
+   "products": [
+     {
+      "id": "3d9fe175-2bc5-442a-
+  b900-48522551de3f",
+      "applicationId": "6dc5daf3-
+  da12-4aae-9766-572da7b6b003",
+      "status": {
+        "isTerminate": true,
+        "code": "COMPLETE",
+        "name": "Завершен"
+      },
+      "stage": {
+        "code":
+  "PAYMENT_COMPLETED",
+        "name":
+  "PAYMENT_COMPLETED"
+      },
+      "createDate":
+  "2026-07-09T17:19:18.891861Z",
+      "lastUpdateDate":
+
+                                            3. Методы и примеры (код) – 10
+UMP – НТ пререквизиты - Worker ump-delete-documents-ncins-pa
+
+  "2026-07-09T17:23:50.600316Z",
+      "code":
+
+  "NON_CREDIT_INSURANCE",
+      "name": "Некредитное
+
+  страхование ЮЛ",
+      "type": "PRODUCT",
+      "main": false,
+      "isDeleted": false,
+      "responsibleManager": {
+        "login": "U_M13RU"
+      },
+      "salesChannel": {
+        "code": "SFA",
+        "name": "SFA"
+      },
+      "productProperties": {
+        "programId": 1073741824,
+        "beginDate":
+
+  "2026-06-25T11:47:13.57Z",
+        "endDate":
+
+  "2026-06-25T11:47:13.57Z",
+        "signDate":
+
+  "2026-06-25T11:47:13.57Z",
+        "duration": 12,
+        "insuranceSum": 20000.0,
+        "insurancePremium": 20000.0,
+        "contractNumber": "1423423/
+
+  sdf/123",
+        "paymentType":
+
+  "payment_account",
+        "agreementLink":
+
+  "7ca85f64-5717-4562-
+  b3fc-6c163f65aba9",
+
+        "insuranceObjects": [
+         {
+           "paymentAccount":
+  "123523464567347"
+         }
+        ],
+        "code":
+  "NON_CREDIT_INSURANCE"
+      },
+      "channelCode": "nib-corp-ncins"
+     }
+   ],
+   "options": [],
+   "id": "6dc5daf3-
+  da12-4aae-9766-572da7b6b003",
+   "createDate":
+  "2026-07-09T17:19:18.833504Z",
+   "lastUpdateDate":
+  "2026-07-09T17:22:46.462517Z",
+   "number": "UMP26070994592",
+   "statusCode": "COMPLETE",
+   "statusName": "Завершена",
+   "finalVersion": true,
+   "isDeleted": false
+  }
+
+  Camunda job output (успех):
+
+                                            3. Методы и примеры (код) – 11
+                                  UMP – НТ пререквизиты - Worker ump-delete-documents-ncins-pa
+
+                                  { "getProcessParams":
+                                  "SUCCESS", ...поля по processType
+                                  из ApplicationMapper }
+
+                                  Ошибка:
+                                  { "getProcessParams": "ERROR" }
+
+7 ump- Delete JobWorker: ump-delete- Camunda output:                 DeleteDocume
+                                                                     ntsWorkerIT
+delet Docum documents-ncins-      {                                  DeleteDocume
+                                                                     ntsService stub
+e-     entsW pa.delete-documents     "documentResponse": {
+
+docu orker HTTP: нет                    "status": "1"
+
+ment delete (DeleteDocumentsService }
+
+s-     TODO AC 1.0 stub)          }
+
+ncins
+
+-      Camunda input              При exception:
+
+pa.de  (DeleteDocumentsWorkerI {
+
+lete-  T / multiInstance             "documentResponse": {
+
+docu   element):                        "status": "2"
+
+ment   {                             }
+
+s         "businessKey":          }
+
+STUB   "550e8400-e29b-41d4-
+
+AC     a716-446655110000",        Реальный POST AlfaCapture
+
+1.0       "document": {           deleteDocsh — TBD (stub).
+
+             "documentLink":
+
+       "https://example.com/
+
+       doc/123"
+
+          }
+
+       }
+
+                                                             3. Методы и примеры (код) – 12
+

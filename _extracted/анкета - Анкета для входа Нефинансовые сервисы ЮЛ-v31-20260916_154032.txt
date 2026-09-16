@@ -1,0 +1,4874 @@
+        Анкета для входа
+Нефинансовые сервисы ЮЛ
+
+                                            UP
+
+                                                    16 сентября, 2026
+                                                                                                  UP – Анкета для входа Нефинансовые сервисы ЮЛ
+
+Table of Contents
+
+1 Объект тестирования................................................................................................................................ 4
+2 Сценарии .................................................................................................................................................... 7
+3 Описание заглушек ................................................................................................................................. 29
+
+                                                                                                                                                                        2
+                                                    UP – Анкета для входа Нефинансовые сервисы ЮЛ
+
+Анкетные данные
+
+Наименование проекта                                Нефинансовые сервисы в SFA
+
+                                                    https://ppm/project/
+                                                    4524c1b6-5930-4fa3-87b2-2b40db555fba/tab-cost
+
+                                                    IS.Нефинансовые сервисы ЮЛ
+
+Группа коммуникации по проекту                      Аналитик - Вишневецкая Полина
+                                                    Техлид - Балашова Светлана Георгиевна
+(Заказчик, деливери, бизнес аналитик, разработчик,  Разработчик - Боргардт Иван Алексеевич
+тестировщик, девопс инженер)
+
+Документация на проект                              https://rsm/visions/vision-details/
+                                                    659feb326bd5a73a3b4a0b24
+      Техническое задание где указаны
+      нефункциональные требования с описанием
+      бизнес процессов, можно ссылку
+
+      Архитектурная документация системы (объекта
+      тестирования. внешних систем которые
+      участвуют в НТ), можно ссылку
+
+Задача                                                  LOADTEST-207121 - Нагрузочное
+                                                    тестирование Нефинансовые сервисы ЮЛ
+
+                                                      DONE
+
+1. https://jira.moscow.alfaintra.net/browse/LOADTEST-20712?src=confmacro
+                                                                                                                                                                      –3
+                                                        UP – Анкета для входа Нефинансовые сервисы ЮЛ
+
+1 Объект тестирования
+
+В данном разделе необходимо описать объект тестирования, какие компоненты участвуют,
+дополнительные узлы, список интеграций и требований к ним
+Пример:
+
+Система            Описание                                             Протокол
+                                                                        взаимодействия
+
+api                                                                     REST
+
+ufr-eos-ul-nssfa-  Общий сервис для
+core-api2
+                         получения типа банка клиента
+                         получения счетов клиента
+                         реализации подписания документов через Модуль
+                         ЕФ. Документы и подписание3
+                         отправка события по макротипу
+                         отправка события о коммуникации
+
+ufr-eos-ul-nssfa-  Настройки (Не участвует во взаимодействии в связи с
+settings4          переходом на config maps)
+
+ui                 Компонент k8s, отвечает за работу фронта             REST
+                                                                        REST
+ufr-eos-ul-nssfa-
+ui5
+
+Redis              для хранения кэша (только Keycloak)
+
+Профиль НТ
+
+2. https://git.moscow.alfaintra.net/projects/NSSFA/repos/ufr-eos-ul-nssfa-core-api/browse
+3. https://confluence.moscow.alfaintra.net/spaces/EOSUL/pages/
+
+   742541553/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C+%D0%95%D0%A4.+
+   %D0%94%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D1%8B+%D0%B8+
+   %D0%BF%D0%BE%D0%B4%D0%BF%D0%B8%D1%81%D0%B0%D0%BD%D0%B8%D0%B5
+4. https://git.moscow.alfaintra.net/projects/NSSFA/repos/ufr-eos-ul-nssfa-settings/browse
+5. https://git.moscow.alfaintra.net/projects/NSSFA/repos/ufr-eos-ul-nssfa-ui/browse
+
+                                                                                                                                      Объект тестирования – 4
+                                        UP – Анкета для входа Нефинансовые сервисы ЮЛ
+
+Наименование сценария                   Описание      TPH SLA               Комм
+                                                                (s)         ентар
+                                                                            ий
+
+UC01_MainPage (see page 3)              Загрузка      42 6
+                                        главной
+                                        страницы
+
+UC02_Subscribe_Button (see page 3)      Нажатие       42 2
+
+                                        кнопки
+
+                                        "Подключить"
+
+UC03_Choosing_Account (see page 3)      Выбор счёта 42 2
+
+UC04_Subscription_Window (see page 3)   Переход к     42 4
+
+                                        подписанию
+
+                                        после
+
+                                        выбора счёта
+
+UC05_Signing_Via_SMS_Code (see page 3)  Электронное 32 10                   75% от
+                                        подписание                          общег
+                                                                            о
+                                                                            (
+                                                                            общий
+                                                                            30 000
+                                                                            оп в
+                                                                            месяц
+                                                                            прибл
+                                                                            изител
+                                                                            ьно 32
+                                                                            оп в
+                                                                            час)
+
+UC05_Application_Scan_Form_Loading_After_Choosing_Handw Загрузка окна 10 2  25% от
+                                                                            общег
+ritten (see page 3)                     заявления                           о
+                                                                            (
+                                        после                               общий
+                                                                            30 000
+                                        выбора                              оп в
+                                                                            месяц
+                                        бумажной                            прибл
+                                                                            изител
+                                        подписи                             ьно 10
+                                                                            оп в
+                                                                            час)
+
+UC06_Uploading_Document (see page 3)    Прикреплени 10 2
+                                        е заявления
+
+                                                      Объект тестирования – 5
+                                               UP – Анкета для входа Нефинансовые сервисы ЮЛ
+
+UC07_Signing_Via_Application (see page 3)      Бумажное       10 10
+UC08_Loading_Subscriptions_Again (see page 3)
+UC09_ServicePanel_ModuleInfo (see page 3)      подписание,
+
+                                               отправка
+
+                                               заявления
+
+                                               (Кнопка
+
+                                               "Продолжить"
+
+                                               )
+
+                                               Загрузка       42 4
+
+                                               подписок
+
+                                               после
+
+                                               подписания
+
+                                               документов
+
+                                               Запрос из СП 330  Устан
+                                                                 авлив
+                                               в ufr-eos-ul-  0  ается
+                                                                 СП
+                                               nssfa-module-
+
+                                               info-api
+
+                                                                 Объект тестирования – 6
+                               UP – Анкета для входа Нефинансовые сервисы ЮЛ
+
+2 Сценарии
+
+                                        К
+
+                                        а
+
+                                        к
+
+                                        п
+
+                   М           Пар   П  р   Ко
+                               аме   р  о   мм
+Сценари  URL       е  Payload  триз  и  в   ен
+й        запро     т           аци   м  е   та
+         са        о           я     е  р   ри
+                               запр  р  и   й
+                   д           оса   о  т
+                                     т  ь
+                                     в  р
+                                     е  е
+                                     т  з
+                                     а  у
+                                        л
+
+                                        ь
+
+                                        т
+
+                                        а
+
+                                        т
+
+UC01_Mai https:/ G                      20
+                                        0
+nPage (see /       E                    O
+                                        K
+page 3)  lt.ufrul T
+
+         klt-
+
+         ui.mos
+
+         cow.al
+
+         faintra.
+
+         net/
+
+         ufr-
+
+         eos-ul-
+
+         nssfa-
+
+         ui/?
+
+         pinEq=
+
+         UC1P7
+
+         A&ses
+
+         sionId
+
+         =a7a4
+
+         c87c-1
+
+         86a-45
+
+         46-9fd
+
+         6-76b9
+
+         0c489
+
+         445&s
+
+         ystemI
+
+         d=SER
+
+         VICEP
+
+         ANEL
+
+                                        Сценарии – 7
+                                UP – Анкета для входа Нефинансовые сервисы ЮЛ
+
+                                                                                     К
+
+                                                                                     а
+
+                                                                                     к
+
+                                                                                     п
+
+                   М                                                        Пар   П  р   Ко
+                                                                            аме   р  о   мм
+Сценари  URL       е  Payload                                               триз  и  в   ен
+й        запро     т                                                        аци   м  е   та
+         са        о                                                        я     е  р   ри
+                                                                            запр  р  и   й
+                   д                                                        оса   о  т
+                                                                                  т  ь
+                                                                                  в  р
+                                                                                  е  е
+                                                                                  т  з
+                                                                                  а  у
+                                                                                     л
+
+                                                                                     ь
+
+                                                                                     т
+
+                                                                                     а
+
+                                                                                     т
+
+         https:/ G                                                                   20
+                                                                                     0
+         /         E                                                                 O
+                                                                                     K
+         lt.ufrul T
+
+         klt-
+
+         ui.mos
+
+         cow.al
+
+         faintra.
+
+         net/
+
+         ufr-
+
+         eos-ul-
+
+         nssfa-
+
+         ui/api/
+
+         subscr
+
+         iptions
+
+         -info/
+
+         UC1P7
+
+         A
+
+UC02_Su https:/ P {\"adLogin\":\"U_NSSFA\",\"sessionId\":                            20
+
+bscribe_B /        O \"a7a4c87c-186a-4546-9fd6-76b90c489445\",                       0
+
+utton (see lt.ufrul S \"organizationId\":\"UC1P7A\",\"userId\":\"XCH88I\",           O
+
+page 3)  klt-      T \"groups\":[\"operator_chat_ul_all\",\"SCRM_SKB_\               K
+
+         ui.mos       \xD0\\x9A\\xD0\\xBB\\xD0\\xB8\\xD0\\xB5\\xD0\
+
+         cow.al       \xBD\\xD1\\x82\\xD1\\x81\\xD0\\xBA\\xD0\\xB8\
+
+         faintra.     \xD0\\xB9_\\xD0\\xBC\\xD0\\xB5\\xD0\\xBD\\xD0\
+
+         net/         \xB5\\xD0\\xB4\\xD0\\xB6\\xD0\\xB5\\xD1\\x80_\
+
+         ufr-         \xD0\\xA1\\xD0\\x9A\\xD0\\x91\"],\"source\":
+
+         eos-ul-      \"SFA\"}
+
+         nssfa-
+
+         ui/api/
+
+         get-
+
+         accou
+
+         nts
+
+                                                                                     Сценарии – 8
+                                                 UP – Анкета для входа Нефинансовые сервисы ЮЛ
+
+                                                                                  К
+
+                                                                                  а
+
+                                                                                  к
+
+                                                                                  п
+
+                     М                                                   Пар   П  р   Ко
+                                                                         аме   р  о   мм
+Сценари    URL       е  Payload                                          триз  и  в   ен
+й          запро     т                                                   аци   м  е   та
+           са        о                                                   я     е  р   ри
+                                                                         запр  р  и   й
+                     д                                                   оса   о  т
+                                                                               т  ь
+                                                                               в  р
+                                                                               е  е
+                                                                               т  з
+                                                                               а  у
+                                                                                  л
+
+                                                                                  ь
+
+                                                                                  т
+
+                                                                                  а
+
+                                                                                  т
+
+UC03_Ch https:/ P {\"organizationId\":\"UC1P7A\",\"userId\":\"XCH88I\",           20
+
+oosing_A /           O \"serviceCode\":\"SVIZM\",\"accountNumber\":               0
+
+ccount (se lt.ufrul S \"40702810802200000855\"}                                   O
+
+e page 3)  klt-      T                                                            K
+
+           ui.mos
+
+           cow.al
+
+           faintra.
+
+           net/
+
+           ufr-
+
+           eos-ul-
+
+           nssfa-
+
+           ui/api/
+
+           check-
+
+           permis
+
+           sions
+
+                                                                                  Сценарии – 9
+                                             UP – Анкета для входа Нефинансовые сервисы ЮЛ
+
+                                                                                    К
+
+                                                                                    а
+
+                                                                                    к
+
+                                                                                    п
+
+                   М                                                       Пар   П  р   Ко
+                                                                           аме   р  о   мм
+Сценари  URL       е  Payload                                              триз  и  в   ен
+й        запро     т                                                       аци   м  е   та
+         са        о                                                       я     е  р   ри
+                                                                           запр  р  и   й
+                   д                                                       оса   о  т
+                                                                                 т  ь
+                                                                                 в  р
+                                                                                 е  е
+                                                                                 т  з
+                                                                                 а  у
+                                                                                    л
+
+                                                                                    ь
+
+                                                                                    т
+
+                                                                                    а
+
+                                                                                    т
+
+UC04_Su https:/ P {\"params\":{\"adLogin\":\"U_NSSFA\",\"sessionId\":               20
+
+bscription /       O \"a7a4c87c-186a-4546-9fd6-76b90c489445\",                      0
+
+_Window ( lt.ufrul S \"userId\":\"XCH88I\",\"organizationId\":\"UC1P7A\",           O
+
+see page 3) klt-   T \"groups\":[\"operator_chat_ul_all\",\"SCRM_SKB_\              K
+
+         ui.mos       \xD0\\x9A\\xD0\\xBB\\xD0\\xB8\\xD0\\xB5\\xD0\
+
+         cow.al       \xBD\\xD1\\x82\\xD1\\x81\\xD0\\xBA\\xD0\\xB8\
+
+         faintra.     \xD0\\xB9_\\xD0\\xBC\\xD0\\xB5\\xD0\\xBD\\xD0\
+
+         net/         \xB5\\xD0\\xB4\\xD0\\xB6\\xD0\\xB5\\xD1\\x80_\
+
+         ufr-         \xD0\\xA1\\xD0\\x9A\\xD0\\x91\"],\"source\":
+
+         eos-ul-      \"SFA\"},\"fileAttributes\":[{\"processType\":
+
+         nssfa-       \"Enable_Svizm\",\""
+
+         ui/          "reportData\":{\"accountNumber\":
+
+         docum        \"40702810802200000855\"}}],\"managerData\":
+
+         ents-        {\"adLogin\":\"U_NSSFA\",\"operatorPosition\":\"\
+
+         proces       \xD0\\xA1\\xD0\\xB8\\xD1\\x81\\xD1\\x82\\xD0\
+
+         sing-        \xB5\\xD0\\xBC\\xD0\\xBD\\xD1\\x8B\\xD0\\xB9 \
+
+         api/         \xD0\\xB0\\xD0\\xBD\\xD0\\xB0\\xD0\\xBB\\xD0\
+
+         genera       \xB8\\xD1\\x82\\xD0\\xB8\\xD0\\xBA\",
+
+         te-          \"operatorBranchCode\":\"salePointId\",
+
+         form         \"operatorFio\":\"\\xD0\\x9F\\xD0\\xB0\\xD1\\x85\
+
+                      \xD0\\xBE\\xD0\\xBC\\xD0\\xBE\\xD0\\xB2 \\xD0\
+
+                      \x92\\xD0\\xB0\\xD1\\x81\\xD0\\xB8\\xD0\\xBB\
+
+                      \xD0\\xB8\\xD0\\xB9 "
+
+                      "\\xD0\\x90\\xD0\\xBB\\xD0\\xB5\\xD0\\xBA\
+
+                      \xD1\\x81\\xD0\\xB0\\xD0\\xBD\\xD0\\xB4\\xD1\
+
+                      \x80\\xD0\\xBE\\xD0\\xB2\\xD0\\xB8\\xD1\\x87\"}}
+
+                                                                                    Сценарии – 10
+                                                   UP – Анкета для входа Нефинансовые сервисы ЮЛ
+
+                                                                                    К
+
+                                                                                    а
+
+                                                                                    к
+
+                                                                                    п
+
+                   М                                                       Пар   П  р   Ко
+                                                                           аме   р  о   мм
+Сценари  URL       е  Payload                                              триз  и  в   ен
+й        запро     т                                                       аци   м  е   та
+         са        о                                                       я     е  р   ри
+                                                                           запр  р  и   й
+                   д                                                       оса   о  т
+                                                                                 т  ь
+                                                                                 в  р
+                                                                                 е  е
+                                                                                 т  з
+                                                                                 а  у
+                                                                                    л
+
+                                                                                    ь
+
+                                                                                    т
+
+                                                                                    а
+
+                                                                                    т
+
+         https:/ P {\"processType\":\"Enable_Svizm\",\"params\":                    20
+
+         /         O {\"adLogin\":\"U_NSSFA\",\"sessionId\":                        0
+
+         lt.ufrul S \"a7a4c87c-186a-4546-9fd6-76b90c489445\",                       O
+
+         klt-      T \"userId\":\"XCH88I\",\"organizationId\":\"UC1P7A\",           K
+
+         ui.mos       \"groups\":[\"operator_chat_ul_all\",\"SCRM_SKB_\
+
+         cow.al       \xD0\\x9A\\xD0\\xBB\\xD0\\xB8\\xD0\\xB5\\xD0\
+
+         faintra.     \xBD\\xD1\\x82\\xD1\\x81\\xD0\\xBA\\xD0\\xB8\
+
+         net/         \xD0\\xB9_\\xD0\\xBC\\xD0\\xB5\\xD0\\xBD\\xD0\
+
+         ufr-         \xB5\\xD0\\xB4\\xD0\\xB6\\xD0\\xB5\\xD1\\x80_\
+
+         eos-ul-      \xD0\\xA1\\xD0\\x9A\\xD0\\x91\"],\"source\":
+
+         nssfa-       \"SFA\"},\"managerData\":{\"adLogin\":"
+
+         ui/          "\"U_NSSFA\",\"operatorPosition\":\"\\xD0\\xA1\
+
+         docum        \xD0\\xB8\\xD1\\x81\\xD1\\x82\\xD0\\xB5\\xD0\
+
+         ents-        \xBC\\xD0\\xBD\\xD1\\x8B\\xD0\\xB9 \\xD0\\xB0\
+
+         proces       \xD0\\xBD\\xD0\\xB0\\xD0\\xBB\\xD0\\xB8\\xD1\
+
+         sing-        \x82\\xD0\\xB8\\xD0\\xBA\",
+
+         api/         \"operatorBranchCode\":\"salePointId\",
+
+         retriev      \"operatorFio\":\"\\xD0\\x9F\\xD0\\xB0\\xD1\\x85\
+
+         e-           \xD0\\xBE\\xD0\\xBC\\xD0\\xBE\\xD0\\xB2 \\xD0\
+
+         availab      \x92\\xD0\\xB0\\xD1\\x81\\xD0\\xB8\\xD0\\xBB\
+
+         le-          \xD0\\xB8\\xD0\\xB9 "
+
+         sign-        "\\xD0\\x90\\xD0\\xBB\\xD0\\xB5\\xD0\\xBA\
+
+         metho        \xD1\\x81\\xD0\\xB0\\xD0\\xBD\\xD0\\xB4\\xD1\
+
+         ds           \x80\\xD0\\xBE\\xD0\\xB2\\xD0\\xB8\\xD1\\x87\"},
+
+                      \"operationId\":\"664b5b690eeedd5b32e5530b\"}
+
+                                                                                    Сценарии – 11
+                                                 UP – Анкета для входа Нефинансовые сервисы ЮЛ
+
+                                                                                    К
+
+                                                                                    а
+
+                                                                                    к
+
+                                                                                    п
+
+                   М                                                       Пар   П  р   Ко
+                                                                           аме   р  о   мм
+Сценари  URL       е  Payload                                              триз  и  в   ен
+й        запро     т                                                       аци   м  е   та
+         са        о                                                       я     е  р   ри
+                                                                           запр  р  и   й
+                   д                                                       оса   о  т
+                                                                                 т  ь
+                                                                                 в  р
+                                                                                 е  е
+                                                                                 т  з
+                                                                                 а  у
+                                                                                    л
+
+                                                                                    ь
+
+                                                                                    т
+
+                                                                                    а
+
+                                                                                    т
+
+UC05_Sig https:/ P {\"operationId\":\"664b5b690eeedd5b32e5530b\",                   20
+
+ning_Via_ /        O \"params\":{\"adLogin\":\"U_NSSFA\",\"sessionId\":             0
+
+SMS_Cod lt.ufrul S \"a7a4c87c-186a-4546-9fd6-76b90c489445\",                        O
+
+e (see page klt-   T \"userId\":\"XCH88I\",\"organizationId\":\"UC1P7A\",           K
+
+3)       ui.mos       \"groups\":[\"operator_chat_ul_all\",\"SCRM_SKB_\
+
+         cow.al       \xD0\\x9A\\xD0\\xBB\\xD0\\xB8\\xD0\\xB5\\xD0\
+
+         faintra.     \xBD\\xD1\\x82\\xD1\\x81\\xD0\\xBA\\xD0\\xB8\
+
+         net/         \xD0\\xB9_\\xD0\\xBC\\xD0\\xB5\\xD0\\xBD\\xD0\
+
+         ufr-         \xB5\\xD0\\xB4\\xD0\\xB6\\xD0\\xB5\\xD1\\x80_\
+
+         eos-ul-      \xD0\\xA1\\xD0\\x9A\\xD0\\x91\"],\"source\":
+
+         nssfa-       \"SFA\"},\"signType\":\""
+
+         ui/          "ELECTRONIC\",\"processType\":
+
+         docum        \"Enable_Svizm\",\"managerData\":{\"adLogin\":
+
+         ents-        \"U_NSSFA\",\"operatorPosition\":\"\\xD0\\xA1\\xD0\
+
+         proces       \xB8\\xD1\\x81\\xD1\\x82\\xD0\\xB5\\xD0\\xBC\
+
+         sing-        \xD0\\xBD\\xD1\\x8B\\xD0\\xB9 \\xD0\\xB0\\xD0\
+
+         api/         \xBD\\xD0\\xB0\\xD0\\xBB\\xD0\\xB8\\xD1\\x82\
+
+         init-        \xD0\\xB8\\xD0\\xBA\",\"operatorBranchCode\":
+
+         sign         \"salePointId\",\"operatorFio\":\"\\xD0\\x9F\\xD0\
+
+                      \xB0\\xD1\\x85\\xD0\\xBE\\xD0\\xBC\\xD0\\xBE\
+
+                      \xD0\\xB2 \\xD0\\x92\\xD0\\xB0\\xD1\\x81\\xD0\
+
+                      \xB8\\xD0\\xBB\\xD0\\xB8\\xD0\\xB9 "
+
+                      "\\xD0\\x90\\xD0\\xBB\\xD0\\xB5\\xD0\\xBA\
+
+                      \xD1\\x81\\xD0\\xB0\\xD0\\xBD\\xD0\\xB4\\xD1\
+
+                      \x80\\xD0\\xBE\\xD0\\xB2\\xD0\\xB8\\xD1\\x87\"}}
+
+                                                                                    Сценарии – 12
+                                 UP – Анкета для входа Нефинансовые сервисы ЮЛ
+
+                                                                                    К
+
+                                                                                    а
+
+                                                                                    к
+
+                                                                                    п
+
+                   М                                                       Пар   П  р   Ко
+                                                                           аме   р  о   мм
+Сценари  URL       е  Payload                                              триз  и  в   ен
+й        запро     т                                                       аци   м  е   та
+         са        о                                                       я     е  р   ри
+                                                                           запр  р  и   й
+                   д                                                       оса   о  т
+                                                                                 т  ь
+                                                                                 в  р
+                                                                                 е  е
+                                                                                 т  з
+                                                                                 а  у
+                                                                                    л
+
+                                                                                    ь
+
+                                                                                    т
+
+                                                                                    а
+
+                                                                                    т
+
+         https:/ P {\"id\":\"625fce4cbe260f106d7c301b\",\"params\":                 20
+
+         /         O {\"adLogin\":\"U_NSSFA\",\"sessionId\":                        0
+
+         lt.ufrul S \"a7a4c87c-186a-4546-9fd6-76b90c489445\",                       O
+
+         klt-      T \"userId\":\"XCH88I\",\"organizationId\":\"UC1P7A\",           K
+
+         ui.mos       \"groups\":[\"operator_chat_ul_all\",\"SCRM_SKB_\
+
+         cow.al       \xD0\\x9A\\xD0\\xBB\\xD0\\xB8\\xD0\\xB5\\xD0\
+
+         faintra.     \xBD\\xD1\\x82\\xD1\\x81\\xD0\\xBA\\xD0\\xB8\
+
+         net/         \xD0\\xB9_\\xD0\\xBC\\xD0\\xB5\\xD0\\xBD\\xD0\
+
+         ufr-         \xB5\\xD0\\xB4\\xD0\\xB6\\xD0\\xB5\\xD1\\x80_\
+
+         eos-ul-      \xD0\\xA1\\xD0\\x9A\\xD0\\x91\"],\"source\":
+
+         nssfa-       \"SFA\"}}
+
+         ui/
+
+         docum
+
+         ents-
+
+         proces
+
+         sing-
+
+         api/
+
+         get-
+
+         status-
+
+         sign-
+
+         operati
+
+         on
+
+                                                                                    Сценарии – 13
+                                                    UP – Анкета для входа Нефинансовые сервисы ЮЛ
+
+                                                                                      К
+
+                                                                                      а
+
+                                                                                      к
+
+                                                                                      п
+
+                   М                                                         Пар   П  р   Ко
+                                                                             аме   р  о   мм
+Сценари  URL       е  Payload                                                триз  и  в   ен
+й        запро     т                                                         аци   м  е   та
+         са        о                                                         я     е  р   ри
+                                                                             запр  р  и   й
+                   д                                                         оса   о  т
+                                                                                   т  ь
+                                                                                   в  р
+                                                                                   е  е
+                                                                                   т  з
+                                                                                   а  у
+                                                                                      л
+
+                                                                                      ь
+
+                                                                                      т
+
+                                                                                      а
+
+                                                                                      т
+
+         https:/ P {\"operationId\":\"664b5b690eeedd5b32e5530b\",                     20
+
+         /         O \"fileAttributes\":[{\"processType\":\"Enable_Svizm\",           0
+
+         lt.ufrul S \"reportData\":{\"accountNumber\":                                O
+
+         klt-      T \"40702810802200000855\"}}],\"params\":                          K
+
+         ui.mos       {\"adLogin\":\"U_NSSFA\",\"sessionId\":
+
+         cow.al       \"a7a4c87c-186a-4546-9fd6-76b90c489445\",
+
+         faintra.     \"userId\":\"XCH88I\",\"organizationId\":\"UC1P7A\",
+
+         net/         \"groups\":[\"operator_chat_ul_all\",\""
+
+         ufr-         "SCRM_SKB_\\xD0\\x9A\\xD0\\xBB\\xD0\\xB8\
+
+         eos-ul-      \xD0\\xB5\\xD0\\xBD\\xD1\\x82\\xD1\\x81\\xD0\
+
+         nssfa-       \xBA\\xD0\\xB8\\xD0\\xB9_\\xD0\\xBC\\xD0\\xB5\
+
+         ui/          \xD0\\xBD\\xD0\\xB5\\xD0\\xB4\\xD0\\xB6\\xD0\
+
+         docum        \xB5\\xD1\\x80_\\xD0\\xA1\\xD0\\x9A\\xD0\
+
+         ents-        \x91\"],\"source\":\"SFA\"}}
+
+         proces
+
+         sing-
+
+         api/
+
+         docum
+
+         ents-
+
+         info
+
+                                                                                      Сценарии – 14
+                                          UP – Анкета для входа Нефинансовые сервисы ЮЛ
+
+                                                                                     К
+
+                                                                                     а
+
+                                                                                     к
+
+                                                                                     п
+
+                   М                                                        Пар   П  р   Ко
+                                                                            аме   р  о   мм
+Сценари  URL       е  Payload                                               триз  и  в   ен
+й        запро     т                                                        аци   м  е   та
+         са        о                                                        я     е  р   ри
+                                                                            запр  р  и   й
+                   д                                                        оса   о  т
+                                                                                  т  ь
+                                                                                  в  р
+                                                                                  е  е
+                                                                                  т  з
+                                                                                  а  у
+                                                                                     л
+
+                                                                                     ь
+
+                                                                                     т
+
+                                                                                     а
+
+                                                                                     т
+
+         https:/ P {\"operationId\":\"664b5b690eeedd5b32e5530b\",                    20
+
+         /         O \"signType\":\"ELECTRONIC\",\"documentsInfo\":                  0
+
+         lt.ufrul S [{\"documentId\":\"1650445900538\"}],                            O
+
+         klt-      T \"processType\":\"Enable_Svizm\",\"params\":                    K
+
+         ui.mos       {\"adLogin\":\"U_NSSFA\",\"sessionId\":
+
+         cow.al       \"a7a4c87c-186a-4546-9fd6-76b90c489445\",
+
+         faintra.     \"userId\":\"XCH88I\",\"organizationId\":\"UC1P7A\",
+
+         net/         \"groups\":[\"operator_chat_ul_all\",\""
+
+         ufr-         "SCRM_SKB_\\xD0\\x9A\\xD0\\xBB\\xD0\\xB8\
+
+         eos-ul-      \xD0\\xB5\\xD0\\xBD\\xD1\\x82\\xD1\\x81\\xD0\
+
+         nssfa-       \xBA\\xD0\\xB8\\xD0\\xB9_\\xD0\\xBC\\xD0\\xB5\
+
+         ui/          \xD0\\xBD\\xD0\\xB5\\xD0\\xB4\\xD0\\xB6\\xD0\
+
+         docum        \xB5\\xD1\\x80_\\xD0\\xA1\\xD0\\x9A\\xD0\
+
+         ents-        \x91\"],\"source\":\"SFA\"},\"managerData\":
+
+         proces       {\"adLogin\":\"U_NSSFA\",\"operatorPosition\":\"\
+
+         sing-        \xD0\\xA1\\xD0\\xB8\\xD1\\x81\\xD1\\x82\\xD0\
+
+         api/         \xB5\\xD0\\xBC\\xD0\\xBD\\xD1\\x8B\\xD0\\xB9 \
+
+         load-        \xD0\\xB0\\xD0\\xBD\\xD0\\xB0\\xD0\\xBB\\xD0\
+
+         sign-        \xB8\\xD1\\x82\\xD0\\xB8\\xD0\\xBA\",\""
+
+         docum        "operatorBranchCode\":\"salePointId\",
+
+         ents         \"operatorFio\":\"\\xD0\\x9F\\xD0\\xB0\\xD1\\x85\
+
+                      \xD0\\xBE\\xD0\\xBC\\xD0\\xBE\\xD0\\xB2 \\xD0\
+
+                      \x92\\xD0\\xB0\\xD1\\x81\\xD0\\xB8\\xD0\\xBB\
+
+                      \xD0\\xB8\\xD0\\xB9 \\xD0\\x90\\xD0\\xBB\\xD0\
+
+                      \xB5\\xD0\\xBA\\xD1\\x81\\xD0\\xB0\\xD0\\xBD\
+
+                      \xD0\\xB4\\xD1\\x80\\xD0\\xBE\\xD0\\xB2\\xD0\
+
+                      \xB8\\xD1\\x87\"}}
+
+                                                                                     Сценарии – 15
+                                                         UP – Анкета для входа Нефинансовые сервисы ЮЛ
+
+                                                                                   К
+
+                                                                                   а
+
+                                                                                   к
+
+                                                                                   п
+
+                   М                                                      Пар   П  р   Ко
+                                                                          аме   р  о   мм
+Сценари  URL       е  Payload                                             триз  и  в   ен
+й        запро     т                                                      аци   м  е   та
+         са        о                                                      я     е  р   ри
+                                                                          запр  р  и   й
+                   д                                                      оса   о  т
+                                                                                т  ь
+                                                                                в  р
+                                                                                е  е
+                                                                                т  з
+                                                                                а  у
+                                                                                   л
+
+                                                                                   ь
+
+                                                                                   т
+
+                                                                                   а
+
+                                                                                   т
+
+         https:/ P {\"organizationId\":\"UC1P7A\",\"userId\":\"XCH88I\",           20
+
+         /         O \"serviceCode\":\"SVIZM\",\"subscriptionState\":              0
+
+         lt.ufrul S \"NONE\",\"accountNumber\":                                    O
+
+         klt-      T \"40702810802200000855\",\"source\":\"SFA\",                  K
+
+         ui.mos       \"signId\":\"625e8b9ef5694a0b16a4be7b\",
+
+         cow.al       \"adLogin\":\"U_NSSFA\",\"freeParams\":null}
+
+         faintra.
+
+         net/
+
+         ufr-
+
+         eos-ul-
+
+         nssfa-
+
+         ui/api/
+
+         enable
+
+         -subsc
+
+         ription
+
+         https:/ P {\"sessionInfo\":{\"sessionId\":                                20
+
+         /         O \"a7a4c87c-186a-4546-9fd6-76b90c489445\",                     0
+
+         lt.ufrul S \"organizationId\":\"UC1P7A\",\"adLogin\":                     O
+
+         klt-      T \"U_NSSFA\"},\"operationId\":                                 K
+
+         ui.mos       \"625e8b9ef5694a0b16a4be7b\",\"status\":
+
+         cow.al       \"completed\",\"subscriptionName\":\"\\xD0\\xA1\
+
+         faintra.     \xD0\\xBC\\xD0\\xB5\\xD0\\xBD\\xD0\\xB0 \\xD0\
+
+         net/         \xB4\\xD0\\xB0\\xD0\\xBD\\xD0\\xBD\\xD1\\x8B\
+
+         ufr-         \xD1\\x85 \\xD0\\xB2 \\xD0\\xA4\\xD0\\x9D\\xD0\
+
+         eos-ul-      \xA1\",\"serviceCode\":\"SVIZM\"}
+
+         nssfa-
+
+         ui/api/
+
+         busine
+
+         ss-
+
+         events
+
+                                                                                   Сценарии – 16
+                               UP – Анкета для входа Нефинансовые сервисы ЮЛ
+
+                                                                                  К
+
+                                                                                  а
+
+                                                                                  к
+
+                                                                                  п
+
+                   М                                                     Пар   П  р   Ко
+                                                                         аме   р  о   мм
+Сценари  URL       е  Payload                                            триз  и  в   ен
+й        запро     т                                                     аци   м  е   та
+         са        о                                                     я     е  р   ри
+                                                                         запр  р  и   й
+                   д                                                     оса   о  т
+                                                                               т  ь
+                                                                               в  р
+                                                                               е  е
+                                                                               т  з
+                                                                               а  у
+                                                                                  л
+
+                                                                                  ь
+
+                                                                                  т
+
+                                                                                  а
+
+                                                                                  т
+
+         https:/ P    {\"eventType\":\"AC01\",\"eventNumber\":                    20
+                      \"625e8b9ef5694a0b16a4be7b\",\"externalSys\":               0
+         /         O  \"AC\",\"cus\":\"UC1P7A\",\"channelId\":\"OCRD\",           O
+                      \"operatorId\":\"U_NSSFA\",\"eventTime\":                   K
+         lt.ufrul S   \"2026-08-08T20:36:53.284Z\",\"classCode\":
+                      \"ENABLE_SVIZM\",\"clientCardId\":
+         klt-      T  \"a7a4c87c-186a-4546-9fd6-76b90c489445\"}
+
+         ui.mos
+
+         cow.al
+
+         faintra.
+
+         net/
+
+         ufr-
+
+         eos-ul-
+
+         nssfa-
+
+         ui/api/
+
+         saveEv
+
+         ent
+
+                                                                                  Сценарии – 17
+                                                UP – Анкета для входа Нефинансовые сервисы ЮЛ
+
+                                                                                      К
+
+                                                                                      а
+
+                                                                                      к
+
+                                                                                      п
+
+                    М                                                        Пар   П  р   Ко
+                                                                             аме   р  о   мм
+Сценари  URL        е  Payload                                               триз  и  в   ен
+й        запро      т                                                        аци   м  е   та
+         са         о                                                        я     е  р   ри
+                                                                             запр  р  и   й
+                    д                                                        оса   о  т
+                                                                                   т  ь
+                                                                                   в  р
+                                                                                   е  е
+                                                                                   т  з
+                                                                                   а  у
+                                                                                      л
+
+                                                                                      ь
+
+                                                                                      т
+
+                                                                                      а
+
+                                                                                      т
+
+UC05_Ap https:/ P {\"operationId\":\"664b5b690eeedd5b32e5530b\",                      20
+
+plication_ /        O \"processType\":\"Enable_Svizm\",\"adLogin\":                   0
+
+Scan_For lt.ufrul S \"U_NSSFA\",\"sessionId\":                                        O
+
+m_Loadin klt-       T \"a7a4c87c-186a-4546-9fd6-76b90c489445\",                       K
+
+g_After_C ui.mos       \"userId\":\"XCH88I\",\"organizationId\":\"UC1P7A\",
+
+hoosing_ cow.al        \"groups\":[\"operator_chat_ul_all\",\"SCRM_SKB_\
+
+Handwritt faintra.     \xD0\\x9A\\xD0\\xBB\\xD0\\xB8\\xD0\\xB5\\xD0\
+
+en (see  net/          \xBD\\xD1\\x82\\xD1\\x81\\xD0\\xBA\\xD0\\xB8\
+
+page 3)  ufr-          \xD0\\xB9_\\xD0\\xBC\\xD0\\xB5\\xD0\\xBD\\xD0\
+
+         eos-ul-       \xB5\\xD0\\xB4\\xD0\\xB6\\xD0\\xB5\\xD1\\x80_\
+
+         nssfa-        \xD0\\xA1\\xD0\\x9A\\xD0\\x91\"],\"source\":\"SFA"
+
+         ui/           "\"}
+
+         docum
+
+         ents-
+
+         proces
+
+         sing-
+
+         api/
+
+         downl
+
+         oad-
+
+         docum
+
+         ents
+
+                                                                                      Сценарии – 18
+                               UP – Анкета для входа Нефинансовые сервисы ЮЛ
+
+                                                                                    К
+
+                                                                                    а
+
+                                                                                    к
+
+                                                                                    п
+
+                   М                                                      Пар    П  р  Ко
+                                                                          аме    р  о  мм
+Сценари  URL       е  Payload                                             триз   и  в  ен
+й        запро     т                                                      аци    м  е  та
+         са        о                                                      я      е  р  ри
+                                                                          запр   р  и  й
+                   д                                                      оса    о  т
+                                                                                 т  ь
+                                                                                 в  р
+                                                                                 е  е
+                                                                                 т  з
+                                                                                 а  у
+                                                                                    л
+
+                                                                                    ь
+
+                                                                                    т
+
+                                                                                    а
+
+                                                                                    т
+
+UC06_Upl https:/ P    --boundary12345\r\n"                                Cont      20 mul
+                        "Content-Disposition: form-                       ent-      0 tipa
+oading_D /         O                                                      Type:     O rt/
+                      data; name=\"data\"\r\n"                            multi     K for
+ocument ( lt.ufrul S    "Content-Type: application/json\r\n\r\n"          part/
+                        "{\"operationId\":                                form-             m-
+see page 3) klt-   T                                                      data;             dat
+                      \"664b5b690eeedd5b32e5530b\","                      boun              a
+         ui.mos         "\"fileAttributes\":[{\"processType\":            dary=             зап
+                                                                          boun              рос
+         cow.al       \"Enable_Svizm\","                                  dary1             .
+                        "\"validateBarcode\":true}],"                     2345              RA
+         faintra.       "\"managerData\":{\"adLogin\":\"U_NSSFA\","                         W_
+                        "\"operatorPosition\":\"\\u0421\\u0438\\u0431\                      BO
+         net/                                                                               DY_
+                      \u0441\\u0442\\u0435\\u0440\\u043d"                                   ST
+         ufr-           "\\u044b\\u0439 \\u0430\\u043d\\u043e\\u043d\                       AR
+                                                                                            T,
+         eos-ul-      \u0438\\u043c\","                                                     pdf
+                        "\"operatorBranchCode\":\"salePointId\","                           Buf
+         nssfa-         "\"operatorFio\":\"\\u041f\\u0430\\u0445\\u043e\                    fer,
+                                                                                            file
+         ui/          \u043c\\u043e\\u0432 "                                                Siz
+                        "\\u0412\\u0430\\u0441\\u0438\\u043b\\u0438\                        e,
+         docum                                                                              RA
+                      \u0439 \\u0410\\u043b\\u0435"                                         W_
+         ents-          "\\u043a\\u0441\\u0430\\u043d\\u0434\\u0440\                        BO
+                                                                                            DY_
+         proces       \u043e\\u0432\\u0438\\u0447\"},"                                      EN
+                        "\"params\":{\"adLogin\":\"U_NSSFA\","                              D-
+         sing-          "\"sessionId\":                                                     зде
+                                                                                            сь
+         api/         \"a7a4c87c-186a-4546-9fd6-76b90c489445\","                            пер
+                        "\"userId\":\"XCH88I\","                                            еда
+         load-          "\"organizationId\":\"UC1P7A\","                                    ем
+                        "\"groups\":[\"operator_chat_ul_all\","                             PD
+         docum          "\"SCRM_SKB_\\u041a\\u043b\\u0438\\u0435\                           F
+
+         ents         \u043d\\u0442\\u0441\\u043a"
+                        "\\u0438\\u0439_\\u043c\\u0435\\u043d\
+
+                      \u0435\\u0434\\u0436\\u0435\\u0440_"
+                        "\\u0421\\u041a\\u0411\"]"
+                        ",\"source\":\"SFA\"}}"
+                        "\r\n"
+                        "--boundary12345\r\n"
+                        "Content-Disposition: form-
+
+                                                                                    Сценарии – 19
+                                                 UP – Анкета для входа Нефинансовые сервисы ЮЛ
+
+                                                                                    К
+
+                                                                                    а
+
+                                                                                    к
+
+                                                                                    п
+
+                   М                                                       Пар   П  р   Ко
+                                                                           аме   р  о   мм
+Сценари  URL       е  Payload                                              триз  и  в   ен
+й        запро     т                                                       аци   м  е   та
+         са        о                                                       я     е  р   ри
+                                                                           запр  р  и   й
+                   д                                                       оса   о  т
+                                                                                 т  ь
+                                                                                 в  р
+                                                                                 е  е
+                                                                                 т  з
+                                                                                 а  у
+                                                                                    л
+
+                                                                                    ь
+
+                                                                                    т
+
+                                                                                    а
+
+                                                                                    т
+
+                      data; name=\"files\"; filename=\"documents-to-                    фа
+
+                      upload.pdf\"\r\n"                                                 йл
+
+                      "Content-Type: application/pdf\r\n"
+
+                      "\r\n",
+
+                      RAW_BODY_START, pdfBuffer, fileSize, RAW_BODY
+
+                      _END,
+
+                      "Body=\r\n--boundary12345--\r\n"
+
+UC07_Sig https:/ P {\"operationId\":\"625ff7c0fc55955e02c3b951\",                   20
+
+ning_Via_ /        O \"params\":{\"adLogin\":\"U_NSSFA\",\"sessionId\":             0
+
+Applicatio lt.ufrul S \"a7a4c87c-186a-4546-9fd6-76b90c489445\",                     O
+
+n (see page klt-   T \"userId\":\"XCH88I\",\"organizationId\":\"UC1P7A\",           K
+
+3)       ui.mos       \"groups\":[\"operator_chat_ul_all\",\"SCRM_SKB_\
+
+         cow.al       \xD0\\x9A\\xD0\\xBB\\xD0\\xB8\\xD0\\xB5\\xD0\
+
+         faintra.     \xBD\\xD1\\x82\\xD1\\x81\\xD0\\xBA\\xD0\\xB8\
+
+         net/         \xD0\\xB9_\\xD0\\xBC\\xD0\\xB5\\xD0\\xBD\\xD0\
+
+         ufr-         \xB5\\xD0\\xB4\\xD0\\xB6\\xD0\\xB5\\xD1\\x80_\
+
+         eos-ul-      \xD0\\xA1\\xD0\\x9A\\xD0\\x91\"],\"source\":
+
+         nssfa-       \"SFA\"},\"signType\":\""
+
+         ui/          "PAPER\",\"processType\":\"Enable_Svizm\",
+
+         docum        \"managerData\":{\"adLogin\":\"U_NSSFA\",
+
+         ents-        \"operatorPosition\":\"\\xD0\\xA1\\xD0\\xB8\\xD1\
+
+         proces       \x81\\xD1\\x82\\xD0\\xB5\\xD0\\xBC\\xD0\\xBD\
+
+         sing-        \xD1\\x8B\\xD0\\xB9 \\xD0\\xB0\\xD0\\xBD\\xD0\
+
+         api/         \xB0\\xD0\\xBB\\xD0\\xB8\\xD1\\x82\\xD0\\xB8\
+
+         init-        \xD0\\xBA\",\"operatorBranchCode\":\"salePointId\",
+
+         sign         \"operatorFio\":\"\\xD0\\x9F\\xD0\\xB0\\xD1\\x85\
+
+                      \xD0\\xBE\\xD0\\xBC\\xD0\\xBE\\xD0\\xB2 \\xD0\
+
+                      \x92\\xD0\\xB0\\xD1\\x81\\xD0\\xB8\\xD0\\xBB\
+
+                      \xD0\\xB8\\xD0\\xB9 "
+
+                      "\\xD0\\x90\\xD0\\xBB\\xD0\\xB5\\xD0\\xBA\
+
+                      \xD1\\x81\\xD0\\xB0\\xD0\\xBD\\xD0\\xB4\\xD1\
+
+                      \x80\\xD0\\xBE\\xD0\\xB2\\xD0\\xB8\\xD1\\x87\"}}
+
+                                                                                    Сценарии – 20
+                                                  UP – Анкета для входа Нефинансовые сервисы ЮЛ
+
+                                                                                     К
+
+                                                                                     а
+
+                                                                                     к
+
+                                                                                     п
+
+                   М                                                        Пар   П  р   Ко
+                                                                            аме   р  о   мм
+Сценари  URL       е  Payload                                               триз  и  в   ен
+й        запро     т                                                        аци   м  е   та
+         са        о                                                        я     е  р   ри
+                                                                            запр  р  и   й
+                   д                                                        оса   о  т
+                                                                                  т  ь
+                                                                                  в  р
+                                                                                  е  е
+                                                                                  т  з
+                                                                                  а  у
+                                                                                     л
+
+                                                                                     ь
+
+                                                                                     т
+
+                                                                                     а
+
+                                                                                     т
+
+         https:/ P {\"operationId\":\"625ff7c0fc55955e02c3b951\",                    20
+
+         /         O \"signType\":\"PAPER\",\"documentsInfo\":                       0
+
+         lt.ufrul S [{\"documentId\":\"625ff7c0fc55955e02c3b951\",                   O
+
+         klt-      T \"barcode\":\"gtr45hf\"}],\"processType\":                      K
+
+         ui.mos       \"Enable_Svizm\",\"params\":{\"adLogin\":
+
+         cow.al       \"U_NSSFA\",\"sessionId\":
+
+         faintra.     \"a7a4c87c-186a-4546-9fd6-76b90c489445\",
+
+         net/         \"userId\":\"XCH88I\",\"organizationId\":\"UC1P7A\",
+
+         ufr-         \"groups\":[\"operator_chat_ul_all\",\""
+
+         eos-ul-      "SCRM_SKB_\\xD0\\x9A\\xD0\\xBB\\xD0\\xB8\
+
+         nssfa-       \xD0\\xB5\\xD0\\xBD\\xD1\\x82\\xD1\\x81\\xD0\
+
+         ui/          \xBA\\xD0\\xB8\\xD0\\xB9_\\xD0\\xBC\\xD0\\xB5\
+
+         docum        \xD0\\xBD\\xD0\\xB5\\xD0\\xB4\\xD0\\xB6\\xD0\
+
+         ents-        \xB5\\xD1\\x80_\\xD0\\xA1\\xD0\\x9A\\xD0\
+
+         proces       \x91\"],\"source\":\"SFA\"},\"managerData\":
+
+         sing-        {\"adLogin\":\"U_NSSFA\",\"operatorPosition\":\"\
+
+         api/         \xD0\\xA1\\xD0\\xB8\\xD1\\x81\\xD1\\x82\\xD0\
+
+         load-        \xB5\\xD0\\xBC\\xD0\\xBD\\xD1\\x8B\\xD0\\xB9 \
+
+         sign-        \xD0\\xB0\\xD0\\xBD\\xD0\\xB0\\xD0\\xBB\\xD0\
+
+         docum        \xB8\\xD1\\x82\\xD0\\xB8\\xD0\\xBA\",\""
+
+         ents         "operatorBranchCode\":\"salePointId\",
+
+                      \"operatorFio\":\"\\xD0\\x9F\\xD0\\xB0\\xD1\\x85\
+
+                      \xD0\\xBE\\xD0\\xBC\\xD0\\xBE\\xD0\\xB2 \\xD0\
+
+                      \x92\\xD0\\xB0\\xD1\\x81\\xD0\\xB8\\xD0\\xBB\
+
+                      \xD0\\xB8\\xD0\\xB9 \\xD0\\x90\\xD0\\xBB\\xD0\
+
+                      \xB5\\xD0\\xBA\\xD1\\x81\\xD0\\xB0\\xD0\\xBD\
+
+                      \xD0\\xB4\\xD1\\x80\\xD0\\xBE\\xD0\\xB2\\xD0\
+
+                      \xB8\\xD1\\x87\"}}
+
+                                                                                     Сценарии – 21
+                                                         UP – Анкета для входа Нефинансовые сервисы ЮЛ
+
+                                                                                   К
+
+                                                                                   а
+
+                                                                                   к
+
+                                                                                   п
+
+                   М                                                      Пар   П  р   Ко
+                                                                          аме   р  о   мм
+Сценари  URL       е  Payload                                             триз  и  в   ен
+й        запро     т                                                      аци   м  е   та
+         са        о                                                      я     е  р   ри
+                                                                          запр  р  и   й
+                   д                                                      оса   о  т
+                                                                                т  ь
+                                                                                в  р
+                                                                                е  е
+                                                                                т  з
+                                                                                а  у
+                                                                                   л
+
+                                                                                   ь
+
+                                                                                   т
+
+                                                                                   а
+
+                                                                                   т
+
+         https:/ P {\"organizationId\":\"UC1P7A\",\"userId\":\"XCH88I\",           20
+
+         /         O \"serviceCode\":\"SVIZM\",\"subscriptionState\":              0
+
+         lt.ufrul S \"NONE\",\"accountNumber\":                                    O
+
+         klt-      T \"40702810802200000855\",\"source\":\"SFA\",                  K
+
+         ui.mos       \"signId\":\"625e8b9ef5694a0b16a4be7b\",
+
+         cow.al       \"adLogin\":\"U_NSSFA\",\"freeParams\":null}
+
+         faintra.
+
+         net/
+
+         ufr-
+
+         eos-ul-
+
+         nssfa-
+
+         ui/api/
+
+         enable
+
+         -subsc
+
+         ription
+
+         https:/ P {\"sessionInfo\":{\"sessionId\":                                20
+
+         /         O \"a7a4c87c-186a-4546-9fd6-76b90c489445\",                     0
+
+         lt.ufrul S \"organizationId\":\"UC1P7A\",\"adLogin\":                     O
+
+         klt-      T \"U_NSSFA\"},\"operationId\":                                 K
+
+         ui.mos       \"625e8b9ef5694a0b16a4be7b\",\"status\":
+
+         cow.al       \"completed\",\"subscriptionName\":\"\\xD0\\xA1\
+
+         faintra.     \xD0\\xBC\\xD0\\xB5\\xD0\\xBD\\xD0\\xB0 \\xD0\
+
+         net/         \xB4\\xD0\\xB0\\xD0\\xBD\\xD0\\xBD\\xD1\\x8B\
+
+         ufr-         \xD1\\x85 \\xD0\\xB2 \\xD0\\xA4\\xD0\\x9D\\xD0\
+
+         eos-ul-      \xA1\",\"serviceCode\":\"SVIZM\"}
+
+         nssfa-
+
+         ui/api/
+
+         busine
+
+         ss-
+
+         events
+
+                                                                                   Сценарии – 22
+                                 UP – Анкета для входа Нефинансовые сервисы ЮЛ
+
+                                                                                    К
+
+                                                                                    а
+
+                                                                                    к
+
+                                                                                    п
+
+                     М                                                     Пар   П  р   Ко
+                                                                           аме   р  о   мм
+Сценари    URL       е  Payload                                            триз  и  в   ен
+й          запро     т                                                     аци   м  е   та
+           са        о                                                     я     е  р   ри
+                                                                           запр  р  и   й
+                     д                                                     оса   о  т
+                                                                                 т  ь
+                                                                                 в  р
+                                                                                 е  е
+                                                                                 т  з
+                                                                                 а  у
+                                                                                    л
+
+                                                                                    ь
+
+                                                                                    т
+
+                                                                                    а
+
+                                                                                    т
+
+           https:/ P    {\"eventType\":\"AC01\",\"eventNumber\":                    20
+                        \"625e8b9ef5694a0b16a4be7b\",\"externalSys\":               0
+           /         O  \"AC\",\"cus\":\"UC1P7A\",\"channelId\":\"OCRD\",           O
+                        \"operatorId\":\"U_NSSFA\",\"eventTime\":                   K
+           lt.ufrul S   \"2026-08-08T20:39:23.123Z\",\"classCode\":
+                        \"ENABLE_SVIZM\",\"clientCardId\":
+           klt-      T  \"a7a4c87c-186a-4546-9fd6-76b90c489445\"}
+
+           ui.mos
+
+           cow.al
+
+           faintra.
+
+           net/
+
+           ufr-
+
+           eos-ul-
+
+           nssfa-
+
+           ui/api/
+
+           saveEv
+
+           ent
+
+UC08_Loa https:/ G                                                                  20
+
+ding_Sub /           E                                                              0
+
+scriptions lt.ufrul T                                                               O
+
+_Again (se klt-                                                                     K
+
+e page 3)  ui.mos
+
+           cow.al
+
+           faintra.
+
+           net/
+
+           ufr-
+
+           eos-ul-
+
+           nssfa-
+
+           ui/api/
+
+           subscr
+
+           iptions
+
+           -info/
+
+           UC1P7
+
+           A
+
+                                                                                    Сценарии – 23
+                                 UP – Анкета для входа Нефинансовые сервисы ЮЛ
+
+                                                                            К
+
+                                                                            а
+
+                                                                            к
+
+                                                                            п
+
+                     М                                             Пар   П  р   Ко
+                                                                   аме   р  о   мм
+Сценари    URL       е  Payload                                    триз  и  в   ен
+й          запро     т                                             аци   м  е   та
+           са        о                                             я     е  р   ри
+                                                                   запр  р  и   й
+                     д                                             оса   о  т
+                                                                         т  ь
+                                                                         в  р
+                                                                         е  е
+                                                                         т  з
+                                                                         а  у
+                                                                            л
+
+                                                                            ь
+
+                                                                            т
+
+                                                                            а
+
+                                                                            т
+
+UC09_Ser   https:/ P    {\"sessionId\":                                     20
+vicePanel               \"a7a4c87c-186a-4546-9fd6-76b90c489445\",           0
+_ModuleI   /         O  \"adLogin\":\"U_NSSFA\"}                            O
+nfo (see                                                                    K
+           lt.ufrul S
+page 3)
+           klt-      T
+
+           api.mo
+
+           scow.
+
+           alfaintr
+
+           a.net/
+
+           ufr-
+
+           eos-ul-
+
+           nssfa-
+
+           modul
+
+           e-info-
+
+           api/
+
+           get-
+
+           info
+
+Более подробное описание процессов
+
+        FRONT Спецификация 1 модуля "Нефинансовые сервисы"6
+        Спецификация по управлению подписками7
+
+6. https://confluence.moscow.alfaintra.net/spaces/EOSUL/pages/1581879613/FRONT+
+   %D0%A1%D0%BF%D0%B5%D1%86%D0%B8%D1%84%D0%B8%D0%BA%D0%B0%D1%86%D0%B8%D1%8F+1+
+   %D0%BC%D0%BE%D0%B4%D1%83%D0%BB%D1%8F+
+   %D0%9D%D0%B5%D1%84%D0%B8%D0%BD%D0%B0%D0%BD%D1%81%D0%BE%D0%B2%D1%8B%D0%B5+
+   %D1%81%D0%B5%D1%80%D0%B2%D0%B8%D1%81%D1%8B
+
+7. https://confluence.moscow.alfaintra.net/spaces/EOSUL/pages/
+   1659275958/%D0%A1%D0%BF%D0%B5%D1%86%D0%B8%D1%84%D0%B8%D0%BA%D0%B0%D1%86%D0%B8%
+   D1%8F+%D0%BF%D0%BE+
+   %D1%83%D0%BF%D1%80%D0%B0%D0%B2%D0%BB%D0%B5%D0%BD%D0%B8%D1%8E+
+   %D0%BF%D0%BE%D0%B4%D0%BF%D0%B8%D1%81%D0%BA%D0%B0%D0%BC%D0%B8
+
+                                                                            Сценарии – 24
+Действия          Макет  UP – Анкета для входа Нефинансовые сервисы ЮЛ
+пользователя
+                                                            Действия
+Пользователь                                                системы
+заходит в модуль
+Нефинансовые                                               При открытии
+сервисы через                                              модуля
+Сервисную                                                  проверяется
+панель                                                     актуальность
+                                                           Клиентской сессии
+Пользователь                                               и проверяет роли
+выбирает                                                   пользователя
+подключить                                                 через ЕФ. Ролевая
+какую-либо                                                 модель по группам,
+подписку и                                                 полученным из
+нажимает кнопку                                            токена кейклок
+"Подключить"                                               Ролевая модель
+                                                           Нефинансовые
+                                                           сервисы
+
+                                                           Модуль проверяет
+                                                           тип банка клиента
+
+                                                           Модуль получает
+                                                           список подписок и
+                                                           их данные из НИБ
+
+                                                           Модуль проверяет,
+                                                           что открыта КС1
+
+                         Сценарии – 25
+Действия       Макет  UP – Анкета для входа Нефинансовые сервисы ЮЛ
+пользователя
+                                                         Действия
+Пользователь                                             системы
+выбирает счет                                           Модуль проверяет
+для списания                                            права
+комиссии и                                              пользователя на
+нажимает                                                подключение
+"Перейти к                                              подписки
+подписанию"
+                                                        Модуль получает
+                                                        счета клиента
+
+                                                        Модуль проверяет
+                                                        права
+                                                        пользователя в
+                                                        НИБ
+
+                                                        Модуль инициирует
+                                                        процесс
+                                                        подписания через
+                                                        ЕФ. Документы и
+                                                        подписание
+
+                      Сценарии – 26
+Действия           Макет             UP – Анкета для входа Нефинансовые сервисы ЮЛ
+пользователя                                                            Действия
+                                                                        системы
+Пользователь              UI-1 UI-2
+выбирает тип                                                                            Сценарии – 27
+подписания
+"Электронная
+подпись" или "На
+бумаге" и
+нажимает
+"Продолжить"
+
+Если выбран
+сценарий "На
+бумаге" - UI-1
+
+      формируетс
+      я печатная
+      форма
+
+      пользовател
+      ь
+      распечатыва
+      ет
+      заявление и
+      передает
+      клиенту на
+      подпись
+
+      после
+      подписания
+      документ
+      загружается
+      с
+      последующе
+      й проверкой
+      соответстви
+      я баркода и
+      созданной
+      операцией
+      подписания
+
+      пользовател
+      ь нажимает
+      "Продолжит
+      ь"
+
+Если выбран
+сценарий
+"Электронная
+подпись" - UI-2
+
+      клиенту
+      оправляется
+      смс
+      сообщение
+      для
+      электронног
+      о
+      подписания
+Действия         Макет  UP – Анкета для входа Нефинансовые сервисы ЮЛ
+пользователя
+                                                           Действия
+После                                                      системы
+подписания                                                Модуль
+автоматически                                             обращается в НИБ
+появляется                                                и подключает
+модальное окно                                            подписку
+об успешном
+подписании                                                Модуль отправлять
+                                                          событие о статусе
+После                                                     подключения
+подписания                                                сервиса
+атоматически                                              Модуль отправляет
+иниицируется                                              событие о
+подключение                                               коммуникации
+подписки. Если
+подключение
+успешно, модуль
+перезагружает
+страницу и
+возвращает
+пользователя на
+начальный экран
+
+                        Сценарии – 28
+                                                   UP – Анкета для входа Нефинансовые сервисы ЮЛ
+
+3 Описание заглушек
+
+В данном разделе даётся подробное описание работы приложения с внешними системами
+(интеграциями) для разработки их заглушек.
+Пример:
+
+                                 В
+
+                                 р
+
+                                 е                                   Пар
+
+                                 м                                   аме
+
+                                 я                                   три
+                                                                     зац
+Сист  Пример запроса             о  Пример ответа                    ия    Коммен
+ема   (payload/query/SQL)        т                                         тарий
+
+                                 к                                   отв
+
+                                 л                                   ета
+
+                                 и
+
+                                 к
+
+                                 а
+
+Keyclo curl --location 'https:// 8                                   хост
+                                                                     и
+ak    idp-api-                   0                                   порт
+                                                                     дол
+      test.alfaintra.net/auth/ м    Пример ответа                    жны
+                                                                     соот
+      realms/ufr-eos-ul-         с  { "sessionId":                   ветс
+                                    "8353a0cc-41d5-46fc-8db9-7ee5eb  твов
+      document-processing/ -        cee7c3", "sessionLevel": 1,      ать
+                                    "clientType": "LEGAL_ENTITY",    загл
+      protocol/openid-           1  "cus": "U15935" }                ушк
+                                                                     е
+      connect/token'             с
+
+                                 е
+
+      \ --header 'Content-Type: к
+
+      application/x-www-
+
+      form-urlencoded' \ --
+
+      data-urlencode
+
+      'client_id=ufr-eos-ul-
+
+      nssfa' \ --data-urlencode
+
+      'client_secret=fgQ3ZIIKe
+
+      OIqG1VJtHbykn834yX5
+
+      7KAr' \ --data-urlencode
+
+      'grant_type=client_crede
+
+      ntials'
+
+                                                                     Описание заглушек – 29
+                                                   UP – Анкета для входа Нефинансовые сервисы ЮЛ
+
+                                 В
+
+                                 р
+
+                                 е                                   Пар
+
+                                 м                                   аме
+
+                                 я                                   три
+                                                                     зац
+Сист  Пример запроса             о  Пример ответа                    ия   Коммен
+ема   (payload/query/SQL)        т                                        тарий
+
+                                 к                                   отв
+
+                                 л                                   ета
+
+                                 и
+
+                                 к
+
+                                 а
+
+ЕФ.   curl --location 'https://  8                                        /home/
+                                                                          u_m15k4/
+Клиен ufrulltmock1:8110/ufr- 0                                            wiremock
+                                                                          _nf/
+тская eos-ul-client-session-     м  Пример ответа                         mappings
+                                                                          /
+Сесси legal-entity-api/session/ с   { "sessionId":                        CardsUL/
+                                    "8353a0cc-41d5-46fc-8db9-7ee5eb       sessionM
+я     get-info8'                 -  cee7c3", "sessionLevel": 1,           AP.json
+                                    "clientType": "LEGAL_ENTITY",
+                                 1  "cus": "U15935" }
+
+      \ --header 'Content-Type: с
+
+      application/json' \ --     е
+
+      header 'Authorization:     к
+
+      Bearer
+
+      eyJhbGciOiJSUzI1NiIsIn
+
+      R5cCIgOiAiSldUIiwia2lkIi
+
+      A6ICJ3czF4NDZta0QxR
+
+      UVKVGNMVTIt' \ --data
+
+      '{ "sessionId" :
+
+      "729e8d1f-
+
+      a572-44e6-9d3d-481ad4
+
+      899b1b" }'
+
+8. https://int.ufrulkint-api.moscow.alfaintra.net/ufr-eos-ul-client-session-legal-entity-api/session/get-info
+                                                                                                                                        Описание заглушек – 30
+                                                   UP – Анкета для входа Нефинансовые сервисы ЮЛ
+
+                                 В
+
+                                 р
+
+                                 е                                     Пар
+
+                                 м                                     аме
+
+                                 я                                     три
+                                                                       зац
+Сист  Пример запроса             о  Пример ответа                      ия   Коммен
+ема   (payload/query/SQL)        т                                          тарий
+
+                                 к                                     отв
+
+                                 л                                     ета
+
+                                 и
+
+                                 к
+
+                                 а
+
+ЕФ.   curl --location 'https://  8
+
+Ролев ufrulltmock1:8110/ufr- 0
+
+ая    rm-auth-gateway-api/       м  Пример ответа
+
+моде secure/ufr-rm-postgres- с      [
+                                           {
+ль    api/permissions9'          -                "id":
+
+                                 1  "NSSFA_SUBSCRIPTION_MANAGEMENT"
+                                    ,
+      \ --header 'Content-Type: с
+                                                  "name": "Разрешение
+      application/json' \ --     е  управлять подписками в ЕФ.
+                                    Нефинансовые сервисы ЮЛ",
+      header 'Authorization:     к
+                                                  "description":
+      Bearer                        "Позволяет подключать или
+                                    отключать подписки",
+      eyJhbGciOiJSUzI1NiIsIn
+                                                  "moduleCode":
+      R5cCIgOiAiSldUIiwia2lkIi      "IS.ЕФ.Нефинансовые сервисы ЮЛ"
+
+      A6ICJ3czF4NDZta0QxR                  }
+
+      UVKVGNMVTIt' \ --data         ]
+
+      '{"groupId":
+
+      ["EOS_UL_REMOTE_BUS
+
+      INESS_ADVISER"]}'
+
+9. https://int.ufrulkint-api.moscow.alfaintra.net/ufr-eos-ul-client-session-legal-entity-api/session/get-info
+                                                                                                                                        Описание заглушек – 31
+                                               UP – Анкета для входа Нефинансовые сервисы ЮЛ
+
+                             В
+
+                             р
+
+                             е                                  Пар
+
+                             м                                  аме
+
+                             я                                  три
+                                                                зац
+Сист    Пример запроса       о  Пример ответа                   ия   Коммен
+ема     (payload/query/SQL)  т                                       тарий
+
+                             к                                  отв
+
+                             л                                  ета
+
+                             и
+
+                             к
+
+                             а
+
+WS                           8
+NIMB.
+WSCu                         0
+stome
+rAcco   Пример               м  Пример ответа
+untLis  запроса
+tGBA                         с
+(       curl --
+получ   location             -
+ение    'https://
+счето   {{хост}}/ufr-        1  [
+в       eos-ul-nssfa-
+клиен   core-api/get-        с     {
+та)     accounts' \
+                             е        "accountNumber":
+/get-   --header
+accou   'Content-Type:       к  "40817810904630018144",
+nts -   application/
+получ   json' \                       "accountType": "EH",
+ение    --data '{
+счето                                 "currency": "RUR",
+в              "adLogin":
+клиен   "eosManager",                 "accountingMode": "100",
+та10
+        "sessionId":                  "remainingBalance":
+        "fee5fcb0-4eb9
+        -4844-85fa-             "85318",
+        ef95516f73bf",
+                                      "balance": "85318",
+        "organizationI
+        d": "UBFYGD",                 "minorUnits": "100",
+
+               "userId":              "hold": "85318",
+        "",
+                                      "issueDate":
+               "groups":
+        ["EOS_MANAGER"          "2007-02-23",
+        ],
+                                      "branchNumber": "0463"
+               "source":
+        "SFA"                      }
+
+                                ]
+
+10. https://confluence.moscow.alfaintra.net/spaces/EOSUL/pages/1697879275/get-accounts+-+
+    %D0%BF%D0%BE%D0%BB%D1%83%D1%87%D0%B5%D0%BD%D0%B8%D0%B5+
+    %D1%81%D1%87%D0%B5%D1%82%D0%BE%D0%B2+
+    %D0%BA%D0%BB%D0%B8%D0%B5%D0%BD%D1%82%D0%B0
+
+                                                                                                                                        Описание заглушек – 32
+                                               UP – Анкета для входа Нефинансовые сервисы ЮЛ
+
+                             В
+
+                             р
+
+                             е                     Пар
+
+                             м                     аме
+
+                             я                     три
+                                                   зац
+Сист    Пример запроса       о  Пример ответа      ия   Коммен
+ема     (payload/query/SQL)  т                          тарий
+
+                             к                     отв
+
+                             л                     ета
+
+                             и
+
+                             к
+
+                             а
+
+        }'
+
+WSCu                         8
+stome
+rExter                       0
+nalSys
+tem12   Пример               м  Пример ответа
+(       запроса
+получ                        с
+ение    curl --
+типа    location             -
+банка   'https://
+)       {хост}/ufr-          1  {
+        eos-ul-nssfa-
+/get-   core-api/get-        с     "bankTypes": [
+bank-   bank-type' \
+type -  --header             е        "АЛБО"
+получ   'Content-Type:
+ение    application/         к     ]
+типа    json' \
+банка   --data '{               }
+клиен
+та11       "adLogin":
+        "eosManager",
+
+           "sessionId":
+        "fee5fcb0-4eb9
+        -4844-85fa-
+        ef95516f73bf",
+
+        "organizationI
+        d": "UBFYGD"
+        }'
+
+  НИБ
+
+11. https://confluence.moscow.alfaintra.net/spaces/EOSUL/pages/1702484565/get-bank-type+-+
+    %D0%BF%D0%BE%D0%BB%D1%83%D1%87%D0%B5%D0%BD%D0%B8%D0%B5+
+    %D1%82%D0%B8%D0%BF%D0%B0+%D0%B1%D0%B0%D0%BD%D0%BA%D0%B0+
+    %D0%BA%D0%BB%D0%B8%D0%B5%D0%BD%D1%82%D0%B0
+
+                                                                                                                                        Описание заглушек – 33
+                                                UP – Анкета для входа Нефинансовые сервисы ЮЛ
+
+                              В
+
+                              р
+
+                              е                                              Пар
+
+                              м                                              аме
+
+                              я                                              три
+                                                                             зац
+Сист     Пример запроса       о  Пример ответа                               ия   Коммен
+ема      (payload/query/SQL)  т                                                   тарий
+
+                              к                                              отв
+
+                              л                                              ета
+
+                              и
+
+                              к
+
+                              а
+
+/                             3
+subscr
+iptions                       с
+-info -
+получ    Пример               е  Пример ответа
+ение     запроса
+активн                        к
+ых и     curl --
+досту    location                {
+пных     'http://corp-                  "subscriptions": [
+серви    gateway-test/                         {
+сов12    corp-nfs-                                    "serviceCode":
+         gateway/
+         secure/corp-            "SVIZM",
+         nfs-facade-                                  "name": "сервис
+         api/
+         subscriptions-           \"Смена данных в ФНС\"",
+         info/{{UPIN                                  "groupId": null,
+         клиента}}' \                                 "status": "NONE",
+         --header                                     "activateDate":
+         'Authorization
+         : Bearer                null,
+         eyJhbGcFCEI0HV                               "nextFeeDate":
+         20k0xgFn0ri3c8
+         TxCNhYrfWHMvO3          null,
+         ujeCoUCeHBmYYz                               "disabledDate":
+         xGbnZ9dTJPj3gw
+         Hv9_FcLswbWOio          null,
+         bZQkqvyg07tZ8y
+         ZmjeBDNu_OE0g'          "clientDisabledDate": null,
+
+                                 "subscriptionExtendedState":
+                                 "NONE",
+
+                                 "subscriptionActions": null,
+                                                      "trialPeriod":
+
+                                 null,
+                                                      "accountNumber":
+
+                                 null,
+                                                      "serviceFee": {
+                                                              "amount":
+
+                                 138000,
+                                                              "currency": {
+
+                                 "currencyCode": 810,
+
+12. https://confluence.moscow.alfaintra.net/spaces/EOSUL/pages/1569702626/subscriptions-info+-+
+    %D0%BF%D0%BE%D0%BB%D1%83%D1%87%D0%B5%D0%BD%D0%B8%D0%B5+
+    %D0%B0%D0%BA%D1%82%D0%B8%D0%B2%D0%BD%D1%8B%D1%85+%D0%B8+
+    %D0%B4%D0%BE%D1%81%D1%82%D1%83%D0%BF%D0%BD%D1%8B%D1%85+
+    %D1%81%D0%B5%D1%80%D0%B2%D0%B8%D1%81%D0%BE%D0%B2
+
+                                                                             Описание заглушек – 34
+                                             UP – Анкета для входа Нефинансовые сервисы ЮЛ
+
+                           В
+
+                           р
+
+                           е                                                   Пар
+
+                           м                                                   аме
+
+                           я                                                   три
+                                                                               зац
+Сист  Пример запроса       о  Пример ответа                                    ия   Коммен
+ема   (payload/query/SQL)  т                                                        тарий
+
+                           к                                                   отв
+
+                           л                                                   ета
+
+                           и
+
+                           к
+
+                           а
+
+                              "mnemonicCode": "RUR",
+
+                              "minorUnits": 100,
+
+                              "unicodeSymbol": null,
+                                                                  "fullName":
+
+                              null
+                                                           }
+
+                                                   },
+                                                   "packageBalance":
+                              null
+                                            },
+                                            {
+                                                   "serviceCode":
+                              "SVIZM_FOREVER",
+                                                   "name": "сервис
+                               \"Смена данных в ФНС\"",
+                                                   "groupId": null,
+                                                   "status": "NONE",
+                                                   "activateDate":
+                              null,
+                                                   "nextFeeDate":
+                              null,
+                                                   "disabledDate":
+                              null,
+
+                              "clientDisabledDate": null,
+
+                              "subscriptionExtendedState":
+                              "NONE",
+
+                              "subscriptionActions": null,
+                                                   "trialPeriod":
+
+                              null,
+                                                   "accountNumber":
+
+                              null,
+                                                   "serviceFee": {
+                                                           "amount":
+
+                              138000,
+                                                           "currency": {
+
+                              "currencyCode": 810,
+
+                                                                               Описание заглушек – 35
+                                             UP – Анкета для входа Нефинансовые сервисы ЮЛ
+
+                           В
+
+                           р
+
+                           е                                                   Пар
+
+                           м                                                   аме
+
+                           я                                                   три
+                                                                               зац
+Сист  Пример запроса       о  Пример ответа                                    ия   Коммен
+ема   (payload/query/SQL)  т                                                        тарий
+
+                           к                                                   отв
+
+                           л                                                   ета
+
+                           и
+
+                           к
+
+                           а
+
+                              "mnemonicCode": "RUR",
+
+                              "minorUnits": 100,
+
+                              "unicodeSymbol": null,
+                                                                  "fullName":
+
+                              null
+                                                           }
+
+                                                   },
+                                                   "packageBalance":
+                              null
+                                            }
+                                     ]
+                              }
+
+                                                                               Описание заглушек – 36
+                                                UP – Анкета для входа Нефинансовые сервисы ЮЛ
+
+                              В
+
+                              р
+
+                              е                               Пар
+
+                              м                               аме
+
+                              я                               три
+                                                              зац
+Сист     Пример запроса       о  Пример ответа                ия   Коммен
+ема      (payload/query/SQL)  т                                    тарий
+
+                              к                               отв
+
+                              л                               ета
+
+                              и
+
+                              к
+
+                              а
+
+/                             8
+check-
+permis                        0
+sions -
+прове    Пример               м  Пример ответа
+рка      запроса
+прав                          с
+для      curl --
+подкл    location                {
+ючени    'http://corp-                  "canSubscribe": true
+я        gateway-test/
+серви    corp-nfs-               }
+сов13    gateway/
+         secure/corp-
+         nfs-facade-
+         api/check-
+         permissions' \
+         --header
+         'Content-Type:
+         application/
+         json' \
+         --header
+         'Authorization
+         : Bearer
+         eyJhbGciOiJSUz
+         I1NiIsInR5cC5W
+         7zjf4NZGyuv_OK
+         SuWFCU2OUTZMTs
+         w' \
+         --data '{
+
+         "organizationI
+         d": "UC2RDT",
+
+                "userId":
+         "XCN5BI",
+
+13. https://confluence.moscow.alfaintra.net/spaces/EOSUL/pages/1780568256/check-permissions+-+
+    %D0%BF%D1%80%D0%BE%D0%B2%D0%B5%D1%80%D0%BA%D0%B0+%D0%BF%D1%80%D0%B0%D0%B2+
+    %D0%B4%D0%BB%D1%8F+
+    %D0%BF%D0%BE%D0%B4%D0%BA%D0%BB%D1%8E%D1%87%D0%B5%D0%BD%D0%B8%D1%8F+
+    %D1%81%D0%B5%D1%80%D0%B2%D0%B8%D1%81%D0%BE%D0%B2
+
+                                                                                                                                        Описание заглушек – 37
+                                             UP – Анкета для входа Нефинансовые сервисы ЮЛ
+
+                           В
+
+                           р
+
+                           е                 Пар
+
+                           м                 аме
+
+                           я                 три
+                                             зац
+Сист  Пример запроса       о  Пример ответа  ия   Коммен
+ема   (payload/query/SQL)  т                      тарий
+
+                           к                 отв
+
+                           л                 ета
+
+                           и
+
+                           к
+
+                           а
+
+      "serviceCode":
+      "ALFA_SECURITY
+      "
+      }'
+
+                                             Описание заглушек – 38
+                                                 UP – Анкета для входа Нефинансовые сервисы ЮЛ
+
+                               В
+
+                               р
+
+                               е                                    Пар
+
+                               м                                    аме
+
+                               я                                    три
+                                                                    зац
+Сист      Пример запроса       о  Пример ответа                     ия   Коммен
+ема       (payload/query/SQL)  т                                         тарий
+
+                               к                                    отв
+
+                               л                                    ета
+
+                               и
+
+                               к
+
+                               а
+
+/                              1
+enable
+-                              с
+subscr
+iption -  Пример               е  Пример запроса
+подкл     запроса
+ючени                          к
+е         curl --
+подпи     location                http 200
+ски14     'http://corp-
+          gateway-test/
+          corp-nfs-
+          gateway/
+          secure/corp-
+          nfs-facade-
+          api/enable-
+          subscription'
+
+           \
+          --header
+          'Content-Type:
+          application/
+          json' \
+          --header
+          'Authorization
+          : Bearer
+          eyJhbGciOiJSUz
+          I1NPIAEkScegA1
+          Fzjf4NZGyuv_OK
+          SuWFCU2OUTZMTs
+          w' \
+          --data '{
+
+          "organizationI
+          d": "UC2RDT",
+
+                 "userId":
+          "XCN5BI",
+
+          "serviceCode":
+          "ALFA_SECURITY
+          ",
+
+14. https://confluence.moscow.alfaintra.net/pages/viewpage.action?
+    pageId=1770840975&src=contextnavpagetreemode
+
+                                                                    Описание заглушек – 39
+                                             UP – Анкета для входа Нефинансовые сервисы ЮЛ
+
+                           В
+
+                           р
+
+                           е                 Пар
+
+                           м                 аме
+
+                           я                 три
+                                             зац
+Сист  Пример запроса       о  Пример ответа  ия   Коммен
+ема   (payload/query/SQL)  т                      тарий
+
+                           к                 отв
+
+                           л                 ета
+
+                           и
+
+                           к
+
+                           а
+
+      "subscriptionS
+      tate": "NONE",
+
+             "source":
+      "SFA",
+
+             "adLogin":
+      "U_NSSFA",
+
+      "accountNumber
+      ":
+      "4070281000130
+      0096433"
+
+      }'
+
+                                             Описание заглушек – 40
+                                               UP – Анкета для входа Нефинансовые сервисы ЮЛ
+
+                             В
+
+                             р
+
+                             е                                      Пар
+
+                             м                                      аме
+
+                             я                                      три
+                                                                    зац
+Сист    Пример запроса       о  Пример ответа                       ия   Коммен
+ема     (payload/query/SQL)  т                                           тарий
+
+                             к                                      отв
+
+                             л                                      ета
+
+                             и
+
+                             к
+
+                             а
+
+/                            8
+genera
+te-                          0
+form
+(ЕФ.    Пример               м  Пример ответа
+Нефи    запроса
+нансо                        с
+вые     curl --
+серви   location             -
+сы      'http://
+ЮЛ)15   {хост}/ufr-          1  {
+        eos-ul-
+        document-            с     "operationId":
+        processing-
+        application-         е  "664b5b690eeedd5b32e5530b",
+        gateway/
+        secure/ufr-          к     "createdDate":
+        eos-ul-
+        document-               1716214633730,
+        processing-
+        operation-api/             "documentIds": [
+        api/generate-
+        form' \                 "b1df3a2c-4f6a-4a71-8fc7-
+                                cdf3f7f6b058"
+        --header
+        'Content-Type:                 ]
+        application/            }
+        json' \
+        --data '{
+        {
+
+        "fileAttribute
+        s": [
+
+               {
+
+        "operation":
+        "Enable_Alfa_S
+        ecurity",
+
+15. https://confluence.moscow.alfaintra.net/pages/viewpage.action?
+    pageId=1722888800&src=contextnavpagetreemode
+
+                                                                    Описание заглушек – 41
+                                             UP – Анкета для входа Нефинансовые сервисы ЮЛ
+
+                           В
+
+                           р
+
+                           е                 Пар
+
+                           м                 аме
+
+                           я                 три
+                                             зац
+Сист  Пример запроса       о  Пример ответа  ия   Коммен
+ема   (payload/query/SQL)  т                      тарий
+
+                           к                 отв
+
+                           л                 ета
+
+                           и
+
+                           к
+
+                           а
+
+      "formatFile":
+      "pdf",
+
+      "localeFile":
+      "ru-RU",
+
+      "templateFile"
+      :
+      "AlfaSecuritys
+      tatement",
+
+      "flattenXML":
+      true,
+
+                "path":
+      "/UFNEFINUL/
+      NSSFA/
+      AlfaSecurityst
+      atement.xdo",
+
+                                             Описание заглушек – 42
+                                             UP – Анкета для входа Нефинансовые сервисы ЮЛ
+
+                           В
+
+                           р
+
+                           е                 Пар
+
+                           м                 аме
+
+                           я                 три
+                                             зац
+Сист  Пример запроса       о  Пример ответа  ия   Коммен
+ема   (payload/query/SQL)  т                      тарий
+
+                           к                 отв
+
+                           л                 ета
+
+                           и
+
+                           к
+
+                           а
+
+      "reportData":
+      "<data><organi
+      zationName>ООО
+      ПЕРЕКРЕСТОК
+      -2000</
+      organizationNa
+      me><accountNum
+      ber>1234567890
+      87654321345678
+      </
+      accountNumber>
+      <authorizedPer
+      son>Борисов Р
+      Ч</
+      authorizedPers
+      on>
+      <employeeDispl
+      ayName>Акрилов
+      Эдуард
+      Петрович</
+      employeeDispla
+      yName><employe
+      eRole>Менеджер
+      отделения по
+      обслуживанию
+      ЮЛ</
+      employeeRole><
+      date>05.07.202
+      4</date></
+      data>",
+
+      "sizeOfDataChu
+      nkDownload":
+      -1,
+
+      "isBarCode":
+      true,
+
+      "nameBarCode":
+      "Barcode",
+
+                                             Описание заглушек – 43
+                                             UP – Анкета для входа Нефинансовые сервисы ЮЛ
+
+                           В
+
+                           р
+
+                           е                 Пар
+
+                           м                 аме
+
+                           я                 три
+                                             зац
+Сист  Пример запроса       о  Пример ответа  ия   Коммен
+ема   (payload/query/SQL)  т                      тарий
+
+                           к                 отв
+
+                           л                 ета
+
+                           и
+
+                           к
+
+                           а
+
+      "isTemp":
+      true,
+
+      "processCode":
+      "119",
+
+      "contentType":
+      "application/
+      pdf",
+
+      "docType":
+      "EFNFSUL001",
+
+      "params": {
+                    "nd":
+
+      "Б/Н",
+                    "dt":
+
+      "03.07.2023",
+                    "to":
+
+      "Enable_Alfa_S
+      ecurity",
+
+                    "fl":
+      "XB7HMG",
+
+                    "pf":
+      "Электронный
+      документ",
+
+                    "bl":
+      "СБ",
+
+      "oper":
+      "Подключение
+      сервиса Альфа-
+      безопасность",
+
+      "proc":
+      "Управление
+      подписками ЮЛ"
+
+                }
+             }
+         ],
+
+                                             Описание заглушек – 44
+                                             UP – Анкета для входа Нефинансовые сервисы ЮЛ
+
+                           В
+
+                           р
+
+                           е                 Пар
+
+                           м                 аме
+
+                           я                 три
+                                             зац
+Сист  Пример запроса       о  Пример ответа  ия   Коммен
+ема   (payload/query/SQL)  т                      тарий
+
+                           к                 отв
+
+                           л                 ета
+
+                           и
+
+                           к
+
+                           а
+
+      "systemData":
+      {
+
+             "userId":
+      "WSEF",
+
+      "externalSyste
+      mCode":
+      "EOSULB01",
+
+      "externalUserC
+      ode": "NSSFA",
+
+      "barCodeType":
+      "B08v1",
+
+      "barCodeConsum
+      erId": "EO",
+
+      "userOBIP":
+      "ufnefinul_use
+      r",
+
+      "passwordOBIP"
+      :
+      "тоЖеСамоеЧтоС
+      верху1",
+
+      "systemCodeAC"
+      : "EFNFSUL",
+
+      "timeZone":
+      "UTC",
+
+      "passwordAC":
+      "1234567890"
+
+         },
+
+      "customerData":
+       {
+             "cus":
+
+      "UBM6PH"
+         },
+
+                                             Описание заглушек – 45
+                                             UP – Анкета для входа Нефинансовые сервисы ЮЛ
+
+                           В
+
+                           р
+
+                           е                 Пар
+
+                           м                 аме
+
+                           я                 три
+                                             зац
+Сист  Пример запроса       о  Пример ответа  ия   Коммен
+ема   (payload/query/SQL)  т                      тарий
+
+                           к                 отв
+
+                           л                 ета
+
+                           и
+
+                           к
+
+                           а
+
+      "managerData":
+      {
+
+             "adLogin":
+      "eosManager",
+
+      "operatorFio":
+      "Акрилов
+      Эдуард
+      Петрович",
+
+      "operatorPosit
+      ion":
+      "Менеджер
+      отделения по
+      обслуживанию
+      ЮЛ",
+
+      "operatorBranc
+      hCode":
+      "MONY",
+
+      "operatorBranc
+      hName": "0262"
+
+         }
+      }
+
+                                             Описание заглушек – 46
+                                                UP – Анкета для входа Нефинансовые сервисы ЮЛ
+
+                              В
+
+                              р
+
+                              е                                     Пар
+
+                              м                                     аме
+
+                              я                                     три
+                                                                    зац
+Сист     Пример запроса       о  Пример ответа                      ия   Коммен
+ема      (payload/query/SQL)  т                                          тарий
+
+                              к                                     отв
+
+                              л                                     ета
+
+                              и
+
+                              к
+
+                              а
+
+/                             8
+retriev
+e-                            0
+availa
+ble-     Пример               м  Пример ответа
+sign-    запроса
+metho                         с
+ds       curl --
+(ЕФ.     location             -
+Нефи     http://{хост}/
+нансо    ufr-eos-ul-          1  {
+вые      document-
+серви    processing-          с     "signTypes": [
+сы       application-
+ЮЛ)16    gateway/             е        "PAPER",
+         secure/ufr-
+         eos-ul-sign-         к        "ELECTRONIC"
+         engine-
+         operation-api/             ]
+         api/retrieve-
+         available-              }
+         sign-methods'
+
+         --header
+         'Content-Type:
+         application/
+         json' \
+         --data '{
+
+         "dataRetrieveA
+         vailableSignin
+         gMethods": {
+
+         "operationId":
+         "620e227f6b7cd
+         73126b44b0a",
+
+         "adLogin":"eos
+         Manager",
+
+16. https://confluence.moscow.alfaintra.net/pages/viewpage.action?
+    pageId=1702484595&src=contextnavpagetreemode
+
+                                                                    Описание заглушек – 47
+                                             UP – Анкета для входа Нефинансовые сервисы ЮЛ
+
+                           В
+
+                           р
+
+                           е                 Пар
+
+                           м                 аме
+
+                           я                 три
+                                             зац
+Сист  Пример запроса       о  Пример ответа  ия   Коммен
+ема   (payload/query/SQL)  т                      тарий
+
+                           к                 отв
+
+                           л                 ета
+
+                           и
+
+                           к
+
+                           а
+
+      "cus":"UBM6PH"
+      ,
+
+      "acus":"XBIT0Q
+      ",
+
+      "customerInfo"
+      :{
+
+      "firstName":"Г
+      еннадий",
+
+      "lastName":
+      "Букин",
+
+      "middleName":
+      "Валерьевич",
+
+      "passportBirth
+      Date":
+      "1989-02-11",
+
+      "mobilePhone":
+      "7912529123",
+
+      "email":
+      "bukin_gena89@
+      gmail.com",
+
+      "passportType"
+      : "001",
+
+      "passportNumbe
+      r": "900876",
+
+      "passportSerie
+      s": "9999",
+
+                                             Описание заглушек – 48
+                                             UP – Анкета для входа Нефинансовые сервисы ЮЛ
+
+                           В
+
+                           р
+
+                           е                 Пар
+
+                           м                 аме
+
+                           я                 три
+                                             зац
+Сист  Пример запроса       о  Пример ответа  ия   Коммен
+ема   (payload/query/SQL)  т                      тарий
+
+                           к                 отв
+
+                           л                 ета
+
+                           и
+
+                           к
+
+                           а
+
+      "passportOffic
+      e": "ТП№3
+      Чукотский
+      автономный
+      округ
+      Уссурийск",
+
+      "passportOffic
+      eCode":
+      "780-002",
+
+      "passportIssue
+      Date":
+      "2019-02-11"
+
+             },
+
+      "employeeInfo"
+      :{
+
+      "bankSignerFul
+      lName":
+      "Гулько Денис
+      Станиславович"
+      ,
+
+      "bankSignerPos
+      ition":
+      "Старший
+      операционно-
+      кассовый
+      работник",
+
+      "branchNumber"
+      : "0214"
+
+             },
+
+      "wsCommonParam
+      s": {
+
+      "userID":"WSEF
+      ",
+
+                                             Описание заглушек – 49
+                                             UP – Анкета для входа Нефинансовые сервисы ЮЛ
+
+                           В
+
+                           р
+
+                           е                 Пар
+
+                           м                 аме
+
+                           я                 три
+                                             зац
+Сист  Пример запроса       о  Пример ответа  ия   Коммен
+ема   (payload/query/SQL)  т                      тарий
+
+                           к                 отв
+
+                           л                 ета
+
+                           и
+
+                           к
+
+                           а
+
+      "branchNumber"
+      : "0214",
+
+      "externalSyste
+      mCode":
+      "NFRB01",
+
+      "externalUserC
+      ode":
+      "ACTUALUL"
+
+             },
+
+      "signOnlinePar
+      ams": {
+
+      "login":
+      "EOS_ACTUAL_UL
+      ",
+
+      "password":"kv
+      Ur#TGz0321",
+
+      "externalSyste
+      mCode":"FLECS"
+      ,
+
+                "asn":
+      "NFRB01",
+
+      "prodType":
+      "ACTUALUL",
+
+      "channelId":
+      "CH16",
+
+      "expiredDate":
+      "2023-02-18"
+
+             }
+      },
+      "requestedSign
+      Types":
+      ["PAPER",
+      "ELECTRONIC"]
+
+                                             Описание заглушек – 50
+                                             UP – Анкета для входа Нефинансовые сервисы ЮЛ
+
+                           В
+
+                           р
+
+                           е                 Пар
+
+                           м                 аме
+
+                           я                 три
+                                             зац
+Сист  Пример запроса       о  Пример ответа  ия   Коммен
+ема   (payload/query/SQL)  т                      тарий
+
+                           к                 отв
+
+                           л                 ета
+
+                           и
+
+                           к
+
+                           а
+
+      }'
+
+                                             Описание заглушек – 51
+                                               UP – Анкета для входа Нефинансовые сервисы ЮЛ
+
+                             В
+
+                             р
+
+                             е                                      Пар
+
+                             м                                      аме
+
+                             я                                      три
+                                                                    зац
+Сист    Пример запроса       о  Пример ответа                       ия   Коммен
+ема     (payload/query/SQL)  т                                           тарий
+
+                             к                                      отв
+
+                             л                                      ета
+
+                             и
+
+                             к
+
+                             а
+
+/init-                       8
+sign
+(ЕФ.                         0
+Нефи
+нансо   Пример               м  Пример ответа
+вые     запроса
+серви                        с
+сы      curl --
+ЮЛ)17   location             -
+        'http://
+        {хост}/ufr-          1  {
+        eos-ul-
+        document-            с     "id":
+        processing-
+        application-         е  "625fce4cbe260f106d7c301b",
+        gateway/
+        secure/ufr-          к     "operationId":
+        eos-ul-sign-
+        engine-                 "625e8b9ef5694a0b16a4be7b",
+        operation-api/
+        api/init-sign'             "createdDate":
+
+         \                      1650445900538,
+        --header
+        'Content-Type:             "signType": "PAPER",
+        application/
+        json' \                    "signAppId":
+        --data '{
+                                "625fce4cbe260f106d7c301b",
+           "signType":
+        "ELECTRONIC",              "status": "SIGNED",
+
+        "operationId":             "chosenSignMethodType":
+        "624d75693ed16
+        a3401af2a4c",           "full",
+
+        "electronicSig             "chosenSignMethod": "ses"
+        n": {
+                                }
+               "adLogin":
+        "eosManager",
+
+               "cus":
+        "U15935",
+
+17. https://confluence.moscow.alfaintra.net/pages/viewpage.action?
+    pageId=1752026829&src=contextnavpagetreemode
+
+                                                                    Описание заглушек – 52
+                                             UP – Анкета для входа Нефинансовые сервисы ЮЛ
+
+                           В
+
+                           р
+
+                           е                 Пар
+
+                           м                 аме
+
+                           я                 три
+                                             зац
+Сист  Пример запроса       о  Пример ответа  ия   Коммен
+ема   (payload/query/SQL)  т                      тарий
+
+                           к                 отв
+
+                           л                 ета
+
+                           и
+
+                           к
+
+                           а
+
+             "acus":
+      "XB7HMG",
+
+      "fullName":
+      "Акрилов
+      Эдуард
+      Петрович",
+
+      "employeeInfo":
+       {
+
+      "bankSignerFul
+      lName":
+      "Гулько Денис
+      Станиславович"
+      ,
+
+      "bankSignerPos
+      ition":
+      "Старший
+      операционно-
+      кассовый
+      работник",
+
+      "branchNumber"
+      : "0000"
+
+             },
+
+      "wsCommonParam
+      s": {
+
+      "userID":
+      "WSEF",
+
+      "branchNumber"
+      : "0000",
+
+      "externalSyste
+      mCode":
+      "EOSULB01",
+
+      "externalUserC
+      ode": "NSSFA"
+
+                                             Описание заглушек – 53
+                                             UP – Анкета для входа Нефинансовые сервисы ЮЛ
+
+                           В
+
+                           р
+
+                           е                 Пар
+
+                           м                 аме
+
+                           я                 три
+                                             зац
+Сист  Пример запроса       о  Пример ответа  ия   Коммен
+ема   (payload/query/SQL)  т                      тарий
+
+                           к                 отв
+
+                           л                 ета
+
+                           и
+
+                           к
+
+                           а
+
+             },
+
+      "signOnlinePar
+      ams": {
+
+                "login":
+      "NSSFA",
+
+      "password":
+      "уточни у
+      аналитика",
+
+      "externalSyste
+      mCode":
+      "NSSFA",
+
+                "asn":
+      "NSSFA",
+
+      "prodType":
+      "subsManageUL"
+      ,
+
+      "channelId":
+      "CH16",
+
+      "expiredDate":
+      "2030-01-01",
+
+      "smsExternalSy
+      stemCode":
+      "NSSFA",
+
+      "smsUserId":
+      "2280"
+
+             }
+         }
+      }
+
+                                             Описание заглушек – 54
+                                              UP – Анкета для входа Нефинансовые сервисы ЮЛ
+
+                            В
+
+                            р
+
+                            е                                       Пар
+
+                            м                                       аме
+
+                            я                                       три
+                                                                    зац
+Сист   Пример запроса       о  Пример ответа                        ия   Коммен
+ема    (payload/query/SQL)  т                                            тарий
+
+                            к                                       отв
+
+                            л                                       ета
+
+                            и
+
+                            к
+
+                            а
+
+/                           8
+downl
+oad-                        0
+docum
+ents   Пример               м  Пример ответа
+(ЕФ.   запроса
+Нефи                        с
+нансо  curl --
+вые    location             -
+серви  'http://
+сы     {хост}/ufr-          1  S1Q18bIqfBxUHvdxwXbHgACAwPfH1OX
+ЮЛ)18  eos-ul-
+       document-            с  BVuEgQKS01obAtSGBMQCgwXF3YVERkU
+       processing-
+       application-         е  HzAVDQqnCg0GFQhSIhoSAggGtKsLEQI
+       gateway/
+       secure/ufr-          к  FSK8BFjEREQQCGQG7LRQBCQAACQGiIy
+       eos-ul-
+       document-               EAOwS1Q18bIqfBxUHvdxwXbHgACAwPf
+       processing-
+       operation-api/          H1OXBVuEgQKS01obAtSGBMQCgwXF3YV
+       api/download-
+       documents' \            ERkUHzAVDQqnCg0GFQhSIhoSAggGtKs
+       --header
+       'Content-Type:          LEQIFSK8BFjEREQQCGQG7LRQBCQAACQ
+       application/
+       json' \                 GiIyEAOw
+       --data '{
+
+       "operationId":
+       "bd602e7a-
+       aa2b-40b5-9381
+       -43e77ad4a0e1"
+       ,
+
+       "systemCodeAC"
+       : "EFNFSUL",
+
+       "passwordAC":
+       "1234567890"
+
+18. https://confluence.moscow.alfaintra.net/pages/viewpage.action?
+    pageId=1752008577&src=contextnavpagetreemode
+
+                                                                    Описание заглушек – 55
+                                             UP – Анкета для входа Нефинансовые сервисы ЮЛ
+
+                           В
+
+                           р
+
+                           е                 Пар
+
+                           м                 аме
+
+                           я                 три
+                                             зац
+Сист  Пример запроса       о  Пример ответа  ия   Коммен
+ема   (payload/query/SQL)  т                      тарий
+
+                           к                 отв
+
+                           л                 ета
+
+                           и
+
+                           к
+
+                           а
+
+      }'
+
+                                             Описание заглушек – 56
+                                               UP – Анкета для входа Нефинансовые сервисы ЮЛ
+
+                             В
+
+                             р
+
+                             е                                      Пар
+
+                             м                                      аме
+
+                             я                                      три
+                                                                    зац
+Сист    Пример запроса       о  Пример ответа                       ия   Коммен
+ема     (payload/query/SQL)  т                                           тарий
+
+                             к                                      отв
+
+                             л                                      ета
+
+                             и
+
+                             к
+
+                             а
+
+/load-                       8
+docum
+ents                         0
+(ЕФ.
+Нефи    Пример               м  Пример ответа
+нансо   запроса
+вые                          с
+серви   curl --
+сы      location             -
+ЮЛ)19   'http://
+        {хост}/ufr-          1  {
+        eos-ul-
+        document-            с     "operationId":
+        processing-
+        application-         е  "625ff7c0fc55955e02c3b951",
+        gateway/
+        secure/ufr-          к     "documentInfoList": [
+        eos-ul-
+        document-                     {
+        processing-
+        operation-api/                   "documentId":
+        api/load-
+        documents' \            "625ff7c0fc55955e02c3b951",
+
+           --form 'data                  "recognitionStatus":
+        {
+                                true,
+           "loadedIds":
+        [],                              "barcode": "gtr45hf"
+
+        "operationId":                   "status": "SIGNED"
+        "625ff7c0fc559
+        55e02c3b951",                 }
+
+        "fileAttribute             ]
+        s": [
+                                }
+               {
+
+        "operation":
+        "Enable_Alfa_S
+        ecurity",
+
+19. https://confluence.moscow.alfaintra.net/pages/viewpage.action?
+    pageId=1730877260&src=contextnavpagetreemode
+
+                                                                    Описание заглушек – 57
+                                             UP – Анкета для входа Нефинансовые сервисы ЮЛ
+
+                           В
+
+                           р
+
+                           е                 Пар
+
+                           м                 аме
+
+                           я                 три
+                                             зац
+Сист  Пример запроса       о  Пример ответа  ия   Коммен
+ема   (payload/query/SQL)  т                      тарий
+
+                           к                 отв
+
+                           л                 ета
+
+                           и
+
+                           к
+
+                           а
+
+      "processCode":
+      "119",
+
+      "contentType":
+      "application/
+      pdf",
+
+      "docType":
+      "EFNFSUL001",
+
+      "isTemp":
+      true,
+
+      "params": {
+                    "nd":
+
+      "Б/Н",
+                    "dt":
+
+      "03.07.2023",
+                    "to":
+
+      "Enable_Alfa_S
+      ecurity",
+
+                    "fl":
+      "XB7HMG",
+
+                    "pf":
+      "Электронный
+      документ",
+
+                    "bl":
+      "СБ",
+
+      "oper":
+      "Подключение
+      сервиса Альфа-
+      безопасность",
+
+      "proc":
+      "Управление
+      подписками ЮЛ"
+
+                }
+             }
+         ],
+
+                                             Описание заглушек – 58
+                                             UP – Анкета для входа Нефинансовые сервисы ЮЛ
+
+                           В
+
+                           р
+
+                           е                 Пар
+
+                           м                 аме
+
+                           я                 три
+                                             зац
+Сист  Пример запроса       о  Пример ответа  ия   Коммен
+ема   (payload/query/SQL)  т                      тарий
+
+                           к                 отв
+
+                           л                 ета
+
+                           и
+
+                           к
+
+                           а
+
+      "systemData":
+      {
+
+      "systemCodeAC"
+      : "EFNFSUL",
+
+      "passwordAC":
+      "1234567890",
+
+      "detectorUsern
+      ame":
+      "WS_TEST_UF_UL
+      _NONFIN",
+
+      "detectorPassw
+      ord": "rRv4-
+      VBBgHAQ"
+
+         },
+
+      "customerData":
+       {
+             "cus":
+
+      "UBM6PH"
+         },
+
+      "managerData":
+      {
+
+             "adLogin":
+      "eosManager",
+
+      "operatorFio":
+      "Акрилов
+      Эдуард
+      Петрович",
+
+      "operatorPosit
+      ion":
+      "Менеджер
+      отделения по
+      обслуживанию
+      ЮЛ",
+
+                                             Описание заглушек – 59
+                                             UP – Анкета для входа Нефинансовые сервисы ЮЛ
+
+                           В
+
+                           р
+
+                           е                 Пар
+
+                           м                 аме
+
+                           я                 три
+                                             зац
+Сист  Пример запроса       о  Пример ответа  ия   Коммен
+ема   (payload/query/SQL)  т                      тарий
+
+                           к                 отв
+
+                           л                 ета
+
+                           и
+
+                           к
+
+                           а
+
+      "operatorBranc
+      hCode":
+      "MONY",
+
+      "operatorBranc
+      hName": "0262"
+
+         }
+      }
+
+                                             Описание заглушек – 60
+                                                UP – Анкета для входа Нефинансовые сервисы ЮЛ
+
+                              В
+
+                              р
+
+                              е                                     Пар
+
+                              м                                     аме
+
+                              я                                     три
+                                                                    зац
+Сист     Пример запроса       о  Пример ответа                      ия   Коммен
+ема      (payload/query/SQL)  т                                          тарий
+
+                              к                                     отв
+
+                              л                                     ета
+
+                              и
+
+                              к
+
+                              а
+
+/get-                         8
+status-
+sign-                         0
+operat
+ion      Пример               м  Пример ответа
+(ЕФ.     запроса
+Нефи                          с
+нансо    curl --
+вые      location             -
+серви    'http://
+сы       {хост}/ufr-          1  {
+ЮЛ)20    eos-ul-
+         document-            с     "id":
+         processing-
+         application-         е  "625fce4cbe260f106d7c301b",
+         gateway/
+         secure/ufr-          к     "operationId":
+         eos-ul-sign-
+         engine-                 "625e8b9ef5694a0b16a4be7b",
+         operation-api/
+         api/get-                   "createdDate":
+         status-sign-
+         operation' \            1650445900538,
+         --header
+         'Content-Type:             "signType": "PAPER",
+         application/
+         json' \                    "signAppId":
+         --data '{
+                                 "625fce4cbe260f106d7c301b",
+                "id":
+         "624fee3a463c9             "status": "SIGNED"
+         e6bdd8624cf"
+         }'                      }
+
+20. https://confluence.moscow.alfaintra.net/pages/viewpage.action?
+    pageId=1752035676&src=contextnavpagetreemode
+
+                                                                    Описание заглушек – 61
+                                               UP – Анкета для входа Нефинансовые сервисы ЮЛ
+
+                             В
+
+                             р
+
+                             е                                      Пар
+
+                             м                                      аме
+
+                             я                                      три
+                                                                    зац
+Сист    Пример запроса       о  Пример ответа                       ия   Коммен
+ема     (payload/query/SQL)  т                                           тарий
+
+                             к                                      отв
+
+                             л                                      ета
+
+                             и
+
+                             к
+
+                             а
+
+/send-                       8
+sign-
+link                         0
+(ЕФ.
+Нефи    Пример               м  Пример ответа
+нансо   запроса
+вые                          с
+серви   curl --
+сы      location             -
+ЮЛ)21   'http://
+        {хост}/ufr-          1  http 200
+        eos-ul-
+        document-            с
+        processing-
+        application-         е
+        gateway/
+        secure/ufr-          к
+        eos-ul-sign-
+        engine-
+        operation-api/
+        api/send-sign-
+        link' \
+        --header
+        'Content-Type:
+        application/
+        json' \
+        --data '
+        {
+
+        "operationId":
+        "6200d74b2cb81
+        a55dd92738e",
+
+           "signAppId":
+        "signAppId",
+
+        "chosenSignMet
+        hodType":
+        "ses",
+
+21. https://confluence.moscow.alfaintra.net/pages/viewpage.action?
+    pageId=1752018881&src=contextnavpagetreemode
+
+                                                                    Описание заглушек – 62
+                                             UP – Анкета для входа Нефинансовые сервисы ЮЛ
+
+                           В
+
+                           р
+
+                           е                 Пар
+
+                           м                 аме
+
+                           я                 три
+                                             зац
+Сист  Пример запроса       о  Пример ответа  ия   Коммен
+ема   (payload/query/SQL)  т                      тарий
+
+                           к                 отв
+
+                           л                 ета
+
+                           и
+
+                           к
+
+                           а
+
+      "chosenSignMet
+      hod": "full",
+
+         "acus":
+      "XB7HMG",
+
+      "wsCommonParam
+      s": {
+
+             "userID":
+      "WSEF",
+
+      "branchNumber"
+      : "0000",
+
+      "externalSyste
+      mCode":
+      "EOSULB01",
+
+      "externalUserC
+      ode": "NSSFA"
+
+         },
+
+      "signOnlinePar
+      ams": {
+
+             "login":
+      "NSSFA",
+
+      "password":
+      "kvUr#TGz0321"
+
+         }
+      }
+
+                                             Описание заглушек – 63
+                                               UP – Анкета для входа Нефинансовые сервисы ЮЛ
+
+                             В
+
+                             р
+
+                             е                                      Пар
+
+                             м                                      аме
+
+                             я                                      три
+                                                                    зац
+Сист    Пример запроса       о  Пример ответа                       ия   Коммен
+ема     (payload/query/SQL)  т                                           тарий
+
+                             к                                      отв
+
+                             л                                      ета
+
+                             и
+
+                             к
+
+                             а
+
+/load-                       8
+sign-
+docum                        0
+ents
+(ЕФ.    Пример               м  Пример ответа
+Нефи    запроса
+нансо                        с
+вые     curl --
+серви   location             -
+сы      'http://
+ЮЛ)22   {хост}/ufr-          1  http 200
+        eos-ul-
+        document-            с
+        processing-
+        application-         е
+        gateway/
+        secure/ufr-          к
+        eos-ul-
+        document-
+        processing-
+        operation-api/
+        api/load-sign-
+        documents' \
+        --header
+        'Content-Type:
+        application/
+        json' \
+        --data '{
+        "skdData": {
+
+        "events": [
+                      {
+
+        "eventNumber":
+        "A-1123456",
+
+        "cus":
+        "UAAAZ1",
+
+22. https://confluence.moscow.alfaintra.net/pages/viewpage.action?
+    pageId=1770816777&src=contextnavpagetreemode
+
+                                                                    Описание заглушек – 64
+                                                UP – Анкета для входа Нефинансовые сервисы ЮЛ
+
+                              В
+
+                              р
+
+                              е                 Пар
+
+                              м                 аме
+
+                              я                 три
+                                                зац
+Сист  Пример запроса          о  Пример ответа  ия   Коммен
+ема   (payload/query/SQL)     т                      тарий
+
+                              к                 отв
+
+                              л                 ета
+
+                              и
+
+                              к
+
+                              а
+
+      "operatorId":
+      "U_M000V",
+
+      "salePointId":
+      "MOXX",
+
+      "processName":
+      "
+      ЕФ
+      .Нефинансовые
+      сервисы",
+
+      "subProcessNam
+      e":
+      "Подключение
+      Альфа-Таргет",
+
+      "clientName":
+      "Новик Март
+      Аристрахович",
+
+      "documents": [
+                           {
+
+      "docId":
+      "ff3cb6f7-
+      acf4-4938-9f27
+      -
+      bb740852c926",
+
+      "docType":
+      "Заявление на
+      подключение",
+
+      "docDate":
+      "2022-03-10T10
+      :15:30",
+
+      "isElectronicD
+      oc": false,
+
+                                                Описание заглушек – 65
+                                                UP – Анкета для входа Нефинансовые сервисы ЮЛ
+
+                              В
+
+                              р
+
+                              е                 Пар
+
+                              м                 аме
+
+                              я                 три
+                                                зац
+Сист  Пример запроса          о  Пример ответа  ия   Коммен
+ема   (payload/query/SQL)     т                      тарий
+
+                              к                 отв
+
+                              л                 ета
+
+                              и
+
+                              к
+
+                              а
+
+      "operatorLogin
+      ": "U_M000V",
+
+      "operatorName"
+      : "Иванов Иван
+      Иванович",
+
+      "operatorBranc
+      h": "MOXX",
+
+      "barcode":
+      "hfQtvBmD",
+
+      "docPages": 1,
+
+      "isElectronicS
+      ign": false,
+
+      "acFolderCode"
+      : "EOSUL01",
+
+      "acProjectCode
+      ": "31"
+
+                           }
+                        ]
+                    }
+                ],
+
+      "wsCommonParam
+      s": {
+
+      "userID":
+      "WSEF",
+
+      "branchNumber"
+      : "0000",
+
+      "externalSyste
+      mCode":
+      "NFRB01",
+
+                                                Описание заглушек – 66
+                                             UP – Анкета для входа Нефинансовые сервисы ЮЛ
+
+                           В
+
+                           р
+
+                           е                 Пар
+
+                           м                 аме
+
+                           я                 три
+                                             зац
+Сист  Пример запроса       о  Пример ответа  ия   Коммен
+ема   (payload/query/SQL)  т                      тарий
+
+                           к                 отв
+
+                           л                 ета
+
+                           и
+
+                           к
+
+                           а
+
+      "externalUserC
+      ode": "NSSFA"
+
+                },
+
+      "eventInfo": {
+
+      "systemCode":
+      "EO",
+
+      "eventType":
+      "DocsToSKDORG"
+
+                }
+             },
+
+      "alfaCaptureDa
+      ta": {
+
+      "systemCodeAC"
+      : "EOSUL",
+
+      "passwordAC":
+      "1234567890",
+
+      "operationInfo
+      ": {
+
+      "operationId":
+      "625d47a0aed25
+      873ecde124f",
+
+      "params": {
+
+      "nm":
+      "Балтика"
+
+                    }
+                },
+
+      "filesInfo": [
+                    {
+
+      "fileId": "",
+
+                                             Описание заглушек – 67
+                                             UP – Анкета для входа Нефинансовые сервисы ЮЛ
+
+                           В
+
+                           р
+
+                           е                 Пар
+
+                           м                 аме
+
+                           я                 три
+                                             зац
+Сист  Пример запроса       о  Пример ответа  ия   Коммен
+ема   (payload/query/SQL)  т                      тарий
+
+                           к                 отв
+
+                           л                 ета
+
+                           и
+
+                           к
+
+                           а
+
+      "params": {
+
+      "key":
+      "value1"
+
+                        }
+                    }
+                ]
+             },
+
+      "consumerSyste
+      ms": [
+
+      "SKD_SYSTEM",
+
+      "AC_SYSTEM"
+             ]
+
+         }'
+
+                                             Описание заглушек – 68
+                                                UP – Анкета для входа Нефинансовые сервисы ЮЛ
+
+                              В
+
+                              р
+
+                              е                                     Пар
+
+                              м                                     аме
+
+                              я                                     три
+                                                                    зац
+Сист     Пример запроса       о  Пример ответа                      ия   Коммен
+ема      (payload/query/SQL)  т                                          тарий
+
+                              к                                     отв
+
+                              л                                     ета
+
+                              и
+
+                              к
+
+                              а
+
+/                             8
+delete-
+docum                         0
+ents
+(ЕФ.     Пример               м  Пример ответа
+Нефи     запроса
+нансо                         с
+вые      curl --
+серви    location             -
+сы       'http://
+ЮЛ)23    {хост}/ufr-          1  http 200
+         eos-ul-
+         document-            с
+         processing-
+         application-         е
+         gateway/
+         secure/ufr-          к
+         eos-ul-
+         document-
+         processing-
+         operation-api/
+         api/delete-
+         documents' \
+         --header
+         'Content-Type:
+         application/
+         json' \
+         --data ' {
+
+          "fileIds":
+         ["ca5283d1-
+         d2f6-4ab5-8a1a
+         -5e7144df0608"
+         ],
+
+         "operationIds"
+         :
+         "624fee3a463c9
+         e6bdd8624cf"
+
+23. https://confluence.moscow.alfaintra.net/pages/viewpage.action?
+    pageId=1770831091&src=contextnavpagetreemode
+
+                                                                    Описание заглушек – 69
+                                             UP – Анкета для входа Нефинансовые сервисы ЮЛ
+
+                           В
+
+                           р
+
+                           е                 Пар
+
+                           м                 аме
+
+                           я                 три
+                                             зац
+Сист  Пример запроса       о  Пример ответа  ия   Коммен
+ема   (payload/query/SQL)  т                      тарий
+
+                           к                 отв
+
+                           л                 ета
+
+                           и
+
+                           к
+
+                           а
+
+      "systemCodeAC"
+      : "EOSUL",
+
+       "passwordAC":
+      "1234567890"
+
+       }'
+
+                                             Описание заглушек – 70
+                                              UP – Анкета для входа Нефинансовые сервисы ЮЛ
+
+                            В
+
+                            р
+
+                            е                                       Пар
+
+                            м                                       аме
+
+                            я                                       три
+                                                                    зац
+Сист   Пример запроса       о  Пример ответа                        ия   Коммен
+ема    (payload/query/SQL)  т                                            тарий
+
+                            к                                       отв
+
+                            л                                       ета
+
+                            и
+
+                            к
+
+                            а
+
+/                           8
+docum
+ents-                       0
+info
+(ЕФ.   Пример               м  Пример ответа
+Нефи   запроса
+нансо                       с
+вые    curl --
+серви  location             -
+сы     'http://
+ЮЛ)24  {хост}/ufr-          1  {
+       eos-ul-
+       document-            с     "operationId":
+       processing-
+       application-         е  "625e8b9ef5694a0b16a4be7b",
+       gateway/
+       secure/ufr-          к     "documentIds": [
+       eos-ul-
+       document-               "1650445900538" ]
+       processing-
+       operation-api/          }
+       api/documents-
+       info' \
+       --header
+       'Content-Type:
+       application/
+       json' \
+       --data ' {
+
+       "operationId":
+       "622f64456680e
+       13fef5e192c",
+
+       "processCode":
+       "119",
+
+        "docType":
+       "EFNFSUL001",
+
+       "systemCodeAC"
+       : "NSSFA",
+
+24. https://confluence.moscow.alfaintra.net/pages/viewpage.action?
+    pageId=1909245583&src=contextnavpagetreemode
+
+                                                                    Описание заглушек – 71
+                                             UP – Анкета для входа Нефинансовые сервисы ЮЛ
+
+                           В
+
+                           р
+
+                           е                 Пар
+
+                           м                 аме
+
+                           я                 три
+                                             зац
+Сист  Пример запроса       о  Пример ответа  ия   Коммен
+ема   (payload/query/SQL)  т                      тарий
+
+                           к                 отв
+
+                           л                 ета
+
+                           и
+
+                           к
+
+                           а
+
+       "passwordAC":
+      "123344"
+
+       }'
+
+                                             Описание заглушек – 72
+                                               UP – Анкета для входа Нефинансовые сервисы ЮЛ
+
+                             В
+
+                             р
+
+                             е                                      Пар
+
+                             м                                      аме
+
+                             я                                      три
+                                                                    зац
+Сист    Пример запроса       о  Пример ответа                       ия   Коммен
+ема     (payload/query/SQL)  т                                           тарий
+
+                             к                                      отв
+
+                             л                                      ета
+
+                             и
+
+                             к
+
+                             а
+
+/                            8
+downl
+oad-                         0
+signed
+-       Пример               м  Пример запроса
+docum   запроса
+ents                         с
+(ЕФ.    curl --
+Нефи    location             -
+нансо   'http://
+вые     {хост}/ufr-          1  http 200
+серви   eos-ul-
+сы      document-            с
+ЮЛ)25   processing-
+        application-         е
+        gateway/
+        secure/ufr-          к
+        eos-ul-
+        document-
+        processing-
+        operation-api/
+        api/download-
+        signed-
+        documents' \
+        --header
+        'Content-Type:
+        application/
+        json' \
+        --data ' {
+
+        "operationId":
+        "622f64456680e
+        13fef5e192c",
+
+        "processCode":
+        "119",
+
+         "docType":
+        "EFNFSUL001",
+
+25. https://confluence.moscow.alfaintra.net/pages/viewpage.action?
+    pageId=1914631460&src=contextnavpagetreemode
+
+                                                                    Описание заглушек – 73
+                                             UP – Анкета для входа Нефинансовые сервисы ЮЛ
+
+                           В
+
+                           р
+
+                           е                 Пар
+
+                           м                 аме
+
+                           я                 три
+                                             зац
+Сист  Пример запроса       о  Пример ответа  ия   Коммен
+ема   (payload/query/SQL)  т                      тарий
+
+                           к                 отв
+
+                           л                 ета
+
+                           и
+
+                           к
+
+                           а
+
+      "systemCodeAC"
+      : "NSSFA",
+
+       "passwordAC":
+      "123344"
+
+       }'
+
+                                             Описание заглушек – 74
+                                               UP – Анкета для входа Нефинансовые сервисы ЮЛ
+
+                             В
+
+                             р
+
+                             е                                      Пар
+
+                             м                                      аме
+
+                             я                                      три
+                                                                    зац
+Сист    Пример запроса       о  Пример ответа                       ия   Коммен
+ема     (payload/query/SQL)  т                                           тарий
+
+                             к                                      отв
+
+                             л                                      ета
+
+                             и
+
+                             к
+
+                             а
+
+/                            8
+busine
+ss-                          0
+events
+-       Пример               м  Пример ответа
+отпра   запроса
+вка                          с
+событ   curl --
+ия для  location             -
+МК26    'http://
+        {хост}/ufr-          1  200
+WSCo    eos-ul-nssfa-
+deBusi  core-api/            с
+nessE   business-
+vent10  events' \            е
+        --header
+        'Authorization       к
+        : Bearer
+        eyJhbGciOiJSUz
+        I1NiIsInR5cT42
+        yUYmOXBN6oqIQU
+        vzoYRxsnMfmzZ3
+        m8uv-FBEKGX8Q'
+
+         \
+        --header
+        'Content-Type:
+        application/
+        json' \
+        --data '{
+
+        "sessionInfo":
+        {
+
+        "sessionId":
+        "fee5fcb0-4eb9
+        -4844-85fa-
+        ef95516f73bf",
+
+        "organizationI
+        d": "UBFYGD",
+
+26. https://confluence.moscow.alfaintra.net/pages/viewpage.action?
+    pageId=2024581778&src=contextnavpagetreemode
+
+                                                                    Описание заглушек – 75
+                                             UP – Анкета для входа Нефинансовые сервисы ЮЛ
+
+                           В
+
+                           р
+
+                           е                 Пар
+
+                           м                 аме
+
+                           я                 три
+                                             зац
+Сист  Пример запроса       о  Пример ответа  ия   Коммен
+ема   (payload/query/SQL)  т                      тарий
+
+                           к                 отв
+
+                           л                 ета
+
+                           и
+
+                           к
+
+                           а
+
+             "adLogin":
+      "eosManager"
+
+         },
+
+      "operationId":
+      "672227ce263f0
+      9329b776788",
+
+         "status":
+      "completed",
+
+      "subscriptionN
+      ame": "Альфа-
+      таргет",
+
+      "serviceCode":
+      "ALFA_TARGET"
+      }'
+
+                                             Описание заглушек – 76
+                                               UP – Анкета для входа Нефинансовые сервисы ЮЛ
+
+                             В
+
+                             р
+
+                             е                                    Пар
+
+                             м                                    аме
+
+                             я                                    три
+                                                                  зац
+Сист    Пример запроса       о  Пример ответа                     ия   Коммен
+ема     (payload/query/SQL)  т                                         тарий
+
+                             к                                    отв
+
+                             л                                    ета
+
+                             и
+
+                             к
+
+                             а
+
+/                            8
+saveE
+vent -                       0
+отпра
+вка     Пример               м  Пример ответа
+событ   запроса
+ия о                         с
+комму   curl --
+никац   location             -
+ии27    'http://
+        {хост}/ufr-          1  {
+        eos-ul-nssfa-
+        core-api/save-       с     "eventType":
+        event' \
+        --header             е  "SUBSCRIPTION_CREATED",
+        'Content-Type:
+        application/         к     "eventNumber":
+        json' \
+        --data '{               "EVT-20250916-001",
+
+           "eventType":            "externalSys": "SFA",
+        "SUBSCRIPTION_
+        CREATED",                  "cus": "UBM6PH",
+
+        "eventNumber":             "channelId": "WEB",
+        "EVT-20250916-
+        001",                      "operatorId": "eosManager",
+
+        "externalSys":             "eventTime":
+        "SFA",
+                                "2025-09-16T14:30:00Z",
+           "cus":
+        "UBM6PH",                  "classCode": "CLS-123",
+
+           "channelId":            "clientCardId": "CARD-987654"
+        "WEB",
+                                }
+        "operatorId":
+        "eosManager",
+
+27. https://confluence.moscow.alfaintra.net/spaces/EOSUL/pages/1812844438/saveEvent+-+
+    %D0%BE%D1%82%D0%BF%D1%80%D0%B0%D0%B2%D0%BA%D0%B0+
+    %D1%81%D0%BE%D0%B1%D1%8B%D1%82%D0%B8%D1%8F+%D0%BE+
+    %D0%BA%D0%BE%D0%BC%D0%BC%D1%83%D0%BD%D0%B8%D0%BA%D0%B0%D1%86%D0%B8%D0%B8
+
+                                                                                                                                        Описание заглушек – 77
+                                             UP – Анкета для входа Нефинансовые сервисы ЮЛ
+
+                           В
+
+                           р
+
+                           е                 Пар
+
+                           м                 аме
+
+                           я                 три
+                                             зац
+Сист  Пример запроса       о  Пример ответа  ия   Коммен
+ема   (payload/query/SQL)  т                      тарий
+
+                           к                 отв
+
+                           л                 ета
+
+                           и
+
+                           к
+
+                           а
+
+         "eventTime":
+      "2025-09-16T14
+      :30:00Z",
+
+         "classCode":
+      "CLS-123",
+
+      "clientCardId"
+      :
+      "CARD-987654"
+      }'
+
+                                             Описание заглушек – 78
+

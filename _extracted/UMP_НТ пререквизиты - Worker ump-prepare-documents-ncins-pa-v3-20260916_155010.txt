@@ -1,0 +1,646 @@
+  НТ пререквизиты - Worker
+ump-prepare-documents-ncins-
+
+                    pa
+
+                                           UMP
+
+                                                     16 сентября, 2026
+                                                                               UMP – НТ пререквизиты - Worker ump-prepare-documents-ncins-pa
+
+Table of Contents
+
+1 Согласование............................................................................................................................................. 3
+2 1. Минимальная информация для определения необходимости проведения НТ ......................... 4
+3 2. Полная информация для проведения НТ (заполняется, только если получено заключение от
+
+  инженера о необходимости проведения НТ) ....................................................................................... 5
+4 3. Методы и примеры (код) ...................................................................................................................... 9
+
+                                                                                                                                                                        2
+1 Согласование                  UMP – НТ пререквизиты - Worker ump-prepare-documents-ncins-pa
+                                                                                  Статус
+  Аналитик
+  Забарянский Юрий Геннадьевич
+
+                                Согласование – 3
+                                  UMP – НТ пререквизиты - Worker ump-prepare-documents-ncins-pa
+
+2 1. Минимальная информация для определения
+   необходимости проведения НТ
+
+   Пререквизит          Значение
+
+1  Описание алгоритма   BPMN develop:
+
+   работы тестируемого  1) get-application-data (processType=PREPARE_DOCUMENTS) →
+
+   метода               ApplicationDataWorker
+
+                        2) ump-prepare-documents-ncins-pa.get-report-data →
+
+                        PrepareDataForPrintFormWorker
+
+                        3) Call Activity ump-generate-and-save-document-pa (внешний
+
+                        процесс)
+
+                        4) update-product → ProductDataUpdateWorker (policyLink из
+
+                        acDocuments[0].acId)
+
+2  SLA по времени отклика 30 сек
+
+3  Частота планируемой  База нагрузки СА: 15000 заявок/мес SFA → ≈89/час среднее, пик
+
+   нагрузки (ЧПН)       ≈180/час. Timeout-ветки ~5% (из них ~95% signing). 1 документ/
+
+                        заявка.
+
+4  Прогнозируемая через TBD
+
+   полгода ЧПН
+
+5  ЧПН на вызываемые    [GET ump-application-facade /applications/{id}] ~89–180
+
+   внутри тестируемого  [get-report-data локально] ~89–180
+
+   метода другие методы [Call Activity generate-and-save] ~89–180
+
+   сервисов             [PUT ump-products /products/{id}] ~89–180
+
+6  Прогнозируемая через TBD
+
+   полгода ЧПН на
+
+   вызываемые внутри
+
+   тестируемого метода
+
+   другие методы
+
+   сервисов
+
+                        1. Минимальная информация для определения необходимости проведения
+                                                                                                                          НТ – 4
+                       UMP – НТ пререквизиты - Worker ump-prepare-documents-ncins-pa
+
+3 2. Полная информация для проведения НТ
+   (заполняется, только если получено заключение от
+   инженера о необходимости проведения НТ)
+
+Пререквизит  Значение
+
+                 2. Полная информация для проведения НТ (заполняется, только если
+             получено заключение от инженера о необходимости проведения НТ) – 5
+                             UMP – НТ пререквизиты - Worker ump-prepare-documents-ncins-pa
+
+6 Пример кода вызова         У воркера отсутствует HTTP-эндпоинт.
+        тестируемого метода  Вызов происходит напрямую в Camunda.
+        сервиса              Camunda на базе Java скрипта, инструкция — https://
+                             confluence.moscow.alfaintra.net/pages/viewpage.action?
+                             pageId=2136656813
+
+                             Пример запроса:
+
+                             Map<String, Object> variables = Map.of(
+                              "businessKey", "550e8400-e29b-41d4-a716-446655110003", // id заявки
+                             (UMP application)
+                              "productCode", "NON_CREDIT_INSURANCE" // const
+                             );
+
+                             final ProcessInstanceEvent processInstanceEvent = client
+                              .newCreateInstanceCommand()
+                              .bpmnProcessId("ump-prepare-documents-ncins-pa")
+                              .latestVersion()
+                              .variables(variables)
+                              .send()
+                              .join();
+
+                             Параметры для запроса:
+                             1. businessKey — UUID заявки (параметризовать на объём ≥ ЧПН)
+                             2. productCode — const NON_CREDIT_INSURANCE (параметризация не
+                             нужна)
+
+                             --- Внутренние вызовы воркеров (из кода/IT) ---
+
+                             1) ApplicationDataWorker type=get-application-data
+                             Camunda job vars:
+                             Map.of(
+                              "businessKey", "550e8400-e29b-41d4-a716-446655110003",
+                              "processType", "PREPARE_DOCUMENTS" // STATIC в BPMN
+                             );
+                             HTTP:
+                             GET {applicationFacade.url}/applications/550e8400-e29b-41d4-
+                             a716-446655110003?include=PARTICIPANT&include=PRODUCT
+                             Host example: http://ump-application-facade.ump.svc.cluster.local
+
+                             2) PrepareDataForPrintFormWorker type=ump-prepare-documents-ncins-
+                             pa.get-report-data
+                             Вход (IT PrepareDataForPrintFormWorkerIT) — поля заявки:
+                             programId=1, fullName="Иванов Иван Иванович", inn="123456789012",
+                             email="ivanov@example.com1", contractNumber="NC-2025-001",
+                             beginDate/endDate, currentDate="2025-01-15",
+                             insuranceSum=1000000.0, insurancePremium=50000.0,
+                             paymentAccount="40817810000000000001"
+
+                             3) Call Activity ump-generate-and-save-document-pa (внешний)
+                             serviceId=businessKey, serviceCode="APPLICATION", productCode,
+                             documents
+
+                             4) ProductDataUpdateWorker type=update-product
+                             Map.of(
+                              "businessKey", "550e8400-e29b-41d4-a716-446655110000",
+
+1. http://example.com
+
+                                 2. Полная информация для проведения НТ (заполняется, только если
+                             получено заключение от инженера о необходимости проведения НТ) – 6
+                             UMP – НТ пререквизиты - Worker ump-prepare-documents-ncins-pa
+
+                              "productId", "3d9fe175-2bc5-442a-b900-48522551de3f",
+                              "acDocuments", "[{ "type": "CONTRACT_ACCOUNT_BLOCK", "acId":
+                             "770e8400-e29b-41d4-a716-446655110002" }]",
+                              "productInfo", "{}"
+                             );
+                             HTTP: PUT {products.url}/products/3d9fe175-2bc5-442a-
+                             b900-48522551de3f
+
+7 Примеры кода ответа        1) get-application-data
+        тестируемого метода  Camunda out: getProcessParams = SUCCESS (+ поля
+        сервиса              PREPARE_DOCUMENTS).
+                             HTTP 200 stub stubs/ump/ump_application_response_200.json
+                             (фрагмент):
+                             {
+                              "id": "6dc5daf3-da12-4aae-9766-572da7b6b003",
+                              "participants": [{ "fullName": "ООО Звезда", "inn": "7826688577", ... }],
+                              "products": [{
+
+                               "id": "3d9fe175-2bc5-442a-b900-48522551de3f",
+                               "code": "NON_CREDIT_INSURANCE",
+                               "productProperties": {
+                                 "contractNumber": "1423423/sdf/123",
+                                 "insuranceSum": 20000.0,
+                                 "agreementLink": "7ca85f64-5717-4562-b3fc-6c163f65aba9"
+                               }
+                              }]
+                             }
+                             Ошибка: getProcessParams = ERROR
+
+                             2) get-report-data out:
+                             {
+                              "serviceId": "550e8400-e29b-41d4-a716-446655110003",
+                              "serviceCode": "APPLICATION",
+                              "productCode": "NON_CREDIT_INSURANCE",
+                              "documents": [{
+
+                               "documentType": "CONTRACT_ACCOUNT_BLOCK",
+                               "reportData": "<Base64(XML datasource)>",
+                               "isWriteInEa": false
+                              }]
+                             }
+
+                             3) update-product out: { "getProcessParams": "SUCCESS" }
+                               при exception putProduct: { "getProcessParams": "ERROR" }
+
+8 Изменяемые данные в PUT /products/{id}: в productProperties.policyLink пишется
+        рамках работе метода acDocuments[0].acId (код ProductDataUpdateWorker).
+
+9 Скрипт, содержащий         Нет необходимости
+        сопутствующие
+        изменения в БД
+        (миграция)
+
+10 Заглушки для внешних      Application facade и products — реальные Feign (на НТ WireMock/
+        зависимостей         стенд). Call Activity generate-and-save — внешний процесс (ПФ+AC),
+                             мок/стенд уточнять.
+
+                                 2. Полная информация для проведения НТ (заполняется, только если
+                             получено заключение от инженера о необходимости проведения НТ) – 7
+                                      UMP – НТ пререквизиты - Worker ump-prepare-documents-ncins-pa
+
+11 Ожидаемое время            10 сек
+        отклика замоканных
+        внешних зависимостей
+
+12 Сценарий тестирования 1) Success: get→report→generate-save→update.
+                                               2) facade error → ERROR.
+                                               3) putProduct exception → ERROR.
+                                               4) пик ~180/час.
+
+                                          2. Полная информация для проведения НТ (заполняется, только если
+                                      получено заключение от инженера о необходимости проведения НТ) – 8
+                                          UMP – НТ пререквизиты - Worker ump-prepare-documents-ncins-pa
+
+4 3. Методы и примеры (код)
+
+Метод /            Где        Полный REQUEST (headers + Полный RESPONSE                 Источник
+
+JobWorker                     body)                         (status + body)
+
+1 get-             Applicati  GET /applications/6dc5daf3-   HTTP/1.1 200 OK             ApplicationD
+     application-  onData     da12-4aae-9766-572da7b6b00    Content-Type:               ataWorkerIT
+     data          Worker     3?                            application/json            stubs/ump/
+     GET /         все        include=PARTICIPANT&include                               ump_applicat
+     applications  процесс    =PRODUCT HTTP/1.1             {                           ion_response
+     /{id}         ы          Host: ump-application-         "externalApplicationIds":  _200.json
+                              facade.ump.svc.cluster.local  [
+                              Accept: application/json        {
+
+                              (без body)                        "extAppId":
+                                                            "7ca85f64-5717-4562-
+                              Camunda job input:            b3fc-6c163f65aba9",
+                              {
+                               "businessKey": "6dc5daf3-        "systemCode": "SFA",
+                              da12-4aae-9766-572da7b6b00        "extAppCreateDate":
+                              3",                           "2026-06-25T12:45:34.78
+                               "processType":               5179Z"
+                              "<PREPARE_DOCUMENTS|            }
+                              SIGNING|PAYMENT|               ],
+                              FINALISATION|                  "channels": [
+                              DELETE_DOCS>"                   {
+                              }                                 "id":
+                                                            "bd458000-77c2-48af-91
+                                                            b4-815f7ef2d4e6",
+                                                                "userInfo": {
+                                                                 "userId": "f6753df0-
+                                                            b5c9-4828-a7b7-
+                                                            f9f3f7d8f33c",
+                                                                 "login": "service-
+                                                            account-nib-corp-ncins"
+                                                                },
+                                                                "code": "nib-corp-
+                                                            ncins",
+                                                                "name": "НИБ.
+                                                            Страхование",
+                                                                "isDeleted": false,
+                                                                "category": "RECEIVE",
+                                                                "type":
+                                                            "BANK_SYSTEM"
+                                                              }
+                                                             ],
+                                                             "participants": [
+                                                              {
+                                                                "id": "bdec62a5-
+                                                            e10a-4c5b-86c7-
+                                                            b5ac190b8055",
+                                                                "applicationId":
+                                                            "6dc5daf3-
+                                                            da12-4aae-9766-572da7
+                                                            b6b003",
+                                                                "isDeleted": false,
+                                                                "contacts": [
+                                                                 {
+
+                                                                   "type": "EMAIL",
+
+                                                            3. Методы и примеры (код) – 9
+2. http://rambler.ru  UMP – НТ пререквизиты - Worker ump-prepare-documents-ncins-pa
+
+                                                    "typeName":
+                                            "Email",
+
+                                                    "value":
+                                            "romashka@rambler.ru2",
+
+                                                    "isPrimary": false
+                                                  },
+                                                  {
+                                                    "type": "PHONE",
+                                                    "typeName":
+                                            "Телефон",
+                                                    "value":
+                                            "79183221488",
+                                                    "isPrimary": false
+                                                  }
+                                                 ],
+                                                 "addresses": [
+                                                  {
+                                                    "type": "FACT",
+                                                    "typeName": "Адрес
+                                            проживания /
+                                            фактический - краткий",
+                                                    "address": {
+
+                                                     "fullAddress": "Г.
+                                            Пушкино ул.
+                                            Колотушкина д. 14/88"
+
+                                                    }
+                                                  }
+                                                 ],
+                                                 "identityDocuments":
+                                            [],
+                                                 "okveds": [],
+                                                 "licenses": [],
+                                                 "management": [],
+                                                 "founders": [],
+                                                 "externalPins": [],
+                                                 "pin": "AAAXYX",
+                                                 "type": "LEGAL",
+                                                 "typeName":
+                                            "Юридическое лицо",
+                                                 "fullName": "ООО
+                                            Звезда",
+                                                 "inn": "7826688577",
+                                                 "createDate":
+                                            "2026-07-09T17:19:18.96
+                                            3685Z",
+                                                 "lastUpdateDate":
+                                            "2026-07-09T17:19:19.99
+                                            786Z",
+                                                 "citizenship":
+                                            "Россия",
+                                                 "citizenshipCode":
+                                            "RU",
+                                                 "taxCountryCode":
+                                            "RU",
+                                                 "ogrn":
+                                            "1027810281740"
+                                               }
+
+                                                                    3. Методы и примеры (код) – 10
+UMP – НТ пререквизиты - Worker ump-prepare-documents-ncins-pa
+
+                        ],
+                        "products": [
+                         {
+
+                           "id":
+                      "3d9fe175-2bc5-442a-
+                      b900-48522551de3f",
+
+                           "applicationId":
+                      "6dc5daf3-
+                      da12-4aae-9766-572da7
+                      b6b003",
+
+                           "status": {
+                            "isTerminate": true,
+                            "code": "COMPLETE",
+                            "name": "Завершен"
+                           },
+                           "stage": {
+                            "code":
+                      "PAYMENT_COMPLETED
+                      ",
+                            "name":
+                      "PAYMENT_COMPLETED
+                      "
+                           },
+                           "createDate":
+                      "2026-07-09T17:19:18.89
+                      1861Z",
+                           "lastUpdateDate":
+                      "2026-07-09T17:23:50.60
+                      0316Z",
+                           "code":
+                      "NON_CREDIT_INSURAN
+                      CE",
+                           "name":
+                      "Некредитное
+                      страхование ЮЛ",
+                           "type": "PRODUCT",
+                           "main": false,
+                           "isDeleted": false,
+
+                      "responsibleManager": {
+                            "login": "U_M13RU"
+                           },
+                           "salesChannel": {
+                            "code": "SFA",
+                            "name": "SFA"
+                           },
+                           "productProperties": {
+                            "programId":
+
+                      1073741824,
+                            "beginDate":
+
+                      "2026-06-25T11:47:13.57
+                      Z",
+
+                            "endDate":
+                      "2026-06-25T11:47:13.57
+                      Z",
+
+                            "signDate":
+                      "2026-06-25T11:47:13.57
+                      Z",
+
+                            "duration": 12,
+                            "insuranceSum":
+
+                                              3. Методы и примеры (код) – 11
+UMP – НТ пререквизиты - Worker ump-prepare-documents-ncins-pa
+
+                      20000.0,
+                            "insurancePremium":
+
+                      20000.0,
+                            "contractNumber":
+
+                      "1423423/sdf/123",
+                            "paymentType":
+
+                      "payment_account",
+                            "agreementLink":
+
+                      "7ca85f64-5717-4562-
+                      b3fc-6c163f65aba9",
+
+                            "insuranceObjects": [
+                              {
+
+                      "paymentAccount":
+                      "123523464567347"
+
+                              }
+                            ],
+                            "code":
+                      "NON_CREDIT_INSURAN
+                      CE"
+                           },
+                           "channelCode": "nib-
+                      corp-ncins"
+                         }
+                        ],
+                        "options": [],
+                        "id": "6dc5daf3-
+                      da12-4aae-9766-572da7
+                      b6b003",
+                        "createDate":
+                      "2026-07-09T17:19:18.83
+                      3504Z",
+                        "lastUpdateDate":
+                      "2026-07-09T17:22:46.46
+                      2517Z",
+                        "number":
+                      "UMP26070994592",
+                        "statusCode":
+                      "COMPLETE",
+                        "statusName":
+                      "Завершена",
+                        "finalVersion": true,
+                        "isDeleted": false
+                      }
+
+                      Camunda job output
+                      (успех):
+                      { "getProcessParams":
+                      "SUCCESS", ...поля по
+                      processType из
+                      ApplicationMapper }
+
+                      Ошибка:
+                      { "getProcessParams":
+                      "ERROR" }
+
+                                              3. Методы и примеры (код) – 12
+                                 UMP – НТ пререквизиты - Worker ump-prepare-documents-ncins-pa
+
+2 ump-                 Prepare   JobWorker: ump-prepare-         Camunda output:           PrepareDataF
+     prepare-          DataFor   documents-ncins-pa.get-report-  {                         orPrintForm
+     documents-        PrintFor  data                             "serviceId": "550e8400-  WorkerIT
+     ncins-pa.get-     mWorke    HTTP: нет (локальная сборка     e29b-41d4-
+     report-data       r         XML + Base64)                   a716-446655110003",
+     (локально         prepare                                    "serviceCode":
+     XML→Base                    Camunda input                   "APPLICATION",
+     64)                         (PrepareDataForPrintFormWor      "productCode":
+                                 kerIT):                         "NON_CREDIT_INSURAN
+                                 {                               CE",
+                                  "businessKey": "550e8400-       "documents": [
+                                 e29b-41d4-
+                                 a716-446655110003",               {
+                                  "programId": 1,                    "documentType":
+                                  "fullName": "Иванов Иван       "CONTRACT_ACCOUNT_
+                                 Иванович",                      BLOCK",
+                                  "inn": "123456789012",             "reportData":
+                                  "email":                       "<Base64 от XML ниже>",
+                                 "ivanov@example.com3",              "isWriteInEa": false
+                                  "contractNumber":                }
+                                 "NC-2025-001",                   ]
+                                  "beginDate":                   }
+                                 "2025-01-01T00:00:00+03:00",
+                                  "endDate":                     XML до Base64 (IT
+                                 "2026-01-01T00:00:00+03:00",    assert):
+                                  "currentDate": "2025-01-15",   <?xml version="1.0"
+                                  "insuranceSum": 1000000.0,     encoding="UTF-8"?>
+                                  "insurancePremium": 50000.0,   <datasource>
+                                  "paymentAccount":
+                                 "40817810000000000001"          <contractNumber>NC-20
+                                 }                               25-001</
+                                                                 contractNumber>
+                                                                  <fullName>Иванов
+                                                                 Иван Иванович</
+                                                                 fullName>
+                                                                  <inn>123456789012</
+                                                                 inn>
+
+                                                                 <email>ivanov@
+                                                                 example.com4</email>
+
+                                                                 <paymentAccount>4081
+                                                                 7810000000000001</
+                                                                 paymentAccount>
+
+                                                                 <insuranceSum>1000000
+                                                                 .00</insuranceSum>
+
+                                                                 <insurancePremium>500
+                                                                 00.00</
+                                                                 insurancePremium>
+                                                                  <beginDate>...</
+                                                                 beginDate>
+                                                                  <endDate>...</endDate>
+
+                                                                 <currentDate>2025-01-15
+
+3. http://example.com
+4. http://example.com
+
+                                                                 3. Методы и примеры (код) – 13
+                         UMP – НТ пререквизиты - Worker ump-prepare-documents-ncins-pa
+
+                                                         </currentDate>
+                                                         </datasource>
+
+3 update-       Product  PUT /products/                  HTTP/1.1 200 OK         ProductData
+     product    DataUpd  3d9fe175-2bc5-442a-             Content-Type:           UpdateWorke
+     PUT /      ateWork  b900-48522551de3f HTTP/1.1      application/json        r + stub
+     products/  er       Host: ump-                                              заявки
+     {id}       prepare  products.ump.svc.cluster.local  ProductDto (возврат     (IT без literal
+                         Content-Type: application/json  Feign; в IT не          PUT body)
+                                                         зафиксирован literal —
+                         {                               обычно эхо
+                          "code":                        обновлённого
+                         "NON_CREDIT_INSURANCE",         продукта).
+                          "name": "Некредитное
+                         страхование ЮЛ",                Camunda job output:
+                          "productProperties": {         { "getProcessParams":
+                           "code":                       "SUCCESS" }
+                         "NON_CREDIT_INSURANCE",
+                           "programId": 1073741824,      При exception:
+                           "contractNumber":             { "getProcessParams":
+                         "1423423/sdf/123",              "ERROR" }
+                           "beginDate":
+                         "2026-06-25T11:47:13.57Z",
+                           "endDate":
+                         "2026-06-25T11:47:13.57Z",
+                           "signDate":
+                         "2026-06-25T11:47:13.57Z",
+                           "duration": 12,
+                           "insuranceSum": 20000.0,
+                           "insurancePremium":
+                         20000.0,
+                           "paymentType":
+                         "payment_account",
+                           "agreementLink":
+                         "7ca85f64-5717-4562-
+                         b3fc-6c163f65aba9",
+                           "policyLink": "770e8400-
+                         e29b-41d4-
+                         a716-446655110002",
+                           "insuranceObjects": [
+
+                             {
+                              "paymentAccount":
+                         "123523464567347"
+                             }
+                           ]
+                          }
+                         }
+
+                         Примечание: body =
+                         ProductCommonParamDto из
+                         productInfo;
+                         worker ДО вызова ставит
+                         productProperties.policyLink =
+                         acDocuments[0].acId.
+                         Живого JSON в IT нет
+                         (Mockito) — тело собрано по
+                         stub заявки + логике
+                         ProductDataUpdateWorker.
+
+                                                         3. Методы и примеры (код) – 14
+                          UMP – НТ пререквизиты - Worker ump-prepare-documents-ncins-pa
+
+4 Call Activity  внешни   calledElement inputs:           outputs:                    BPMN
+     ump-        й        {                               {                           prepare Call
+     generate-   процесс   "serviceId": "<businessKey>",   "docsResult": "<result>",  Activity
+     and-save-   prepare   "serviceCode":                  "acRequestId": "<...>",
+     document-            "APPLICATION",                   "acDocuments":
+     pa                    "productCode":                 [ { "type":
+                          "<productCode>",                "CONTRACT_ACCOUNT_
+                           "documents":                   BLOCK", "acId":
+                          [ { "documentType":             "<uuid>" } ]
+                          "CONTRACT_ACCOUNT_BLOC          }
+                          K", "reportData": "<Base64>",
+                          "isWriteInEa": false } ]
+                          }
+                          Полный HTTP ПФ/AC — во
+                          внешнем процессе (не в ump-
+                          ncins-pa).
+
+                                                          3. Методы и примеры (код) – 15
+

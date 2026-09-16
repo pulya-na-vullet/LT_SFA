@@ -1,0 +1,592 @@
+НТ пререквизиты - Worker
+   ump-payment-ncins-pa
+
+                                      UMP
+
+                                             16 сентября, 2026
+                                                                                             UMP – НТ пререквизиты - Worker ump-payment-ncins-pa
+
+Table of Contents
+
+1 1. Минимальная информация для определения необходимости проведения НТ ......................... 4
+2 2. Полная информация для проведения НТ ......................................................................................... 6
+3 3. Методы и примеры (код) .................................................................................................................... 10
+
+                                                                                                                                                                        2
+Аналитик                      UMP – НТ пререквизиты - Worker ump-payment-ncins-pa
+Забарянский Юрий Геннадьевич                                       Статус
+
+                              –3
+                                                       UMP – НТ пререквизиты - Worker ump-payment-ncins-pa
+
+1 1. Минимальная информация для определения
+   необходимости проведения НТ
+
+Пререквизит          Значение                 Пример         Где взять              Предпочти
+                                                                                    тельная
+                                                                                    роль
+                                                                                    заполняющ
+                                                                                    его
+
+1 Описание           1) get-application-data  ump-payment-   Ссылка на алгоритм     Разработчик
+     алгоритма       (PAYMENT) →              ncins-pa.bpmn  работы метода в git
+     работы          ApplicationDataWorke     +              или confluence.
+     тестируемого    r                        InsurancePay
+     метода          2) ump-payment-          mentWorker
+                     ncins-pa.set-hold →
+                     InsurancePaymentWor
+                     ker → PaymentService
+                     STUB
+                     3) ump-payment-
+                     ncins-pa.create-
+                     payment → STUB
+                     4) receive
+                     paymentFinished
+                     (corr=businessKey в
+                     develop)
+                     5) Event SubProcess
+                     timer PT15M →
+                     timeoutMessage=TIM
+                     EOUT
+
+2 SLA по времени     Hold/create stub —       PT15M в        Получить от заказчика  Аналитик
+     отклика         мгновенно. Message       develop        доработки. Если
+                     почти мгновенно.                        заказчик неизвестен,
+                     Timer BPMN develop =                    определяем
+                     PT15M.                                  экспертно.
+
+3 Частота            ≈85/час / пик ≈170       15000×~95%     Аналитику нужно        Аналитик
+     планируемой     (после signing-                         определить: 1) макс
+     нагрузки (ЧПН)  timeout).                               вызовов/час; 2)
+                                                             среднее вызовов/час;
+                                                             3) способ получения
+                                                             оценки.
+
+4 Прогнозируема TBD                           TBD            Само НТ проводится Аналитик
+     я через полгода
+     ЧПН                                                     по профилю
+
+                                                             прогнозируемой через
+
+                                                             полгода ЧПН.
+
+                               1. Минимальная информация для определения необходимости проведения
+                                                                                                                                 НТ – 4
+                                                UMP – НТ пререквизиты - Worker ump-payment-ncins-pa
+
+5 ЧПН на            [GET applications]     EQ HTTP в  Может совпадать с     Аналитик
+     вызываемые     ~85–170                коде нет   ЧПН.
+     внутри         [set-hold STUB] ~85–
+     тестируемого   170
+     метода другие  [create-payment STUB]
+     методы         ~85–170
+     сервисов       [paymentFinished
+                    message] ~85–170
+
+6 Прогнозируема TBD                        TBD        Может совпадать с     Аналитик
+                                                      прогнозируемой через
+я через полгода                                       полгода ЧПН.
+
+ЧПН на
+
+вызываемые
+
+внутри
+
+тестируемого
+
+метода другие
+
+методы
+
+сервисов
+
+                     1. Минимальная информация для определения необходимости проведения
+                                                                                                                       НТ – 5
+                                                    UMP – НТ пререквизиты - Worker ump-payment-ncins-pa
+
+2 2. Полная информация для проведения НТ
+
+Пререквизит Значение                                Пример        Где взять             Пре
+                                                                                        дпо
+                                                                                        чтит
+                                                                                        ель
+                                                                                        ная
+                                                                                        рол
+                                                                                        ь
+                                                                                        запо
+                                                                                        лня
+                                                                                        юще
+                                                                                        го
+
+6 Пример кода      У воркера отсутствует HTTP-      Map.of(...);  Сначала нужно добыть  Тест
+     вызова        эндпоинт.                        stub без      живой пример вызова   иров
+     тестируемого  Вызов происходит напрямую в      HTTP;         сервиса (локально/    щик
+     метода        Camunda.                         message       стенд) и
+     сервиса       Camunda на базе Java скрипта,    paymentFinis  параметризовать.
+                   инструкция — https://            hed TBD       Параметризовать
+                   confluence.moscow.alfaintra.ne                 businessKey (≥ ЧПН).
+                   t/pages/viewpage.action?                       productCode — const
+                   pageId=2136656813                              NON_CREDIT_INSURANC
+                                                                  E.
+                   Пример запроса:                                Источник примеров:
+                                                                  develop ump-ncins-pa
+                   Map<String, Object> variables =                *WorkerIT + stubs.
+                   Map.of(
+                    "businessKey", "550e8400-
+                   e29b-41d4-
+                   a716-446655110003", // id
+                   заявки (UMP application)
+                    "productCode",
+                   "NON_CREDIT_INSURANCE" //
+                   const
+                   );
+
+                   final ProcessInstanceEvent
+                   processInstanceEvent = client
+                    .newCreateInstanceCommand(
+                   )
+                    .bpmnProcessId("ump-
+                   payment-ncins-pa")
+                    .latestVersion()
+                    .variables(variables)
+                    .send()
+                    .join();
+
+                   Параметры для запроса:
+                   1. businessKey — UUID заявки
+                   (параметризовать на объём ≥
+                   ЧПН)
+                   2. productCode — const
+                   NON_CREDIT_INSURANCE
+                   (параметризация не нужна)
+
+                   --- Шаги
+
+                                                    2. Полная информация для проведения НТ – 6
+                                                        UMP – НТ пререквизиты - Worker ump-payment-ncins-pa
+
+(InsurancePaymentWorkerIT) ---
+1) get-application-data
+processType=PAYMENT
+Map.of("businessKey",
+"550e8400-e29b-41d4-
+a716-446655110003",
+"processType", "PAYMENT");
+HTTP: GET .../applications/
+550e8400-e29b-41d4-
+a716-446655110003?
+include=PARTICIPANT&include=
+PRODUCT
+2) set-hold type=ump-payment-
+ncins-pa.set-hold
+Map.of(
+ "businessKey", "550e8400-
+e29b-41d4-
+a716-446655110003",
+ "productCode",
+"NON_CREDIT_INSURANCE",
+ "systemCode", "SFA"
+);
+HTTP: отсутствует
+(PaymentService TODO stub)
+3) create-payment type=ump-
+payment-ncins-pa.create-
+payment
+те же variables; HTTP
+отсутствует (stub)
+4) Receive paymentFinished,
+correlationKey=businessKey
+(develop)
+JSON payload — TBD (добыть
+на стенде / подложить пустой/
+минимальный message)
+
+                                                                  2. Полная информация для проведения НТ – 7
+                                                  UMP – НТ пререквизиты - Worker ump-payment-ncins-pa
+
+7 Примеры кода set-hold / create-payment          {"code":"SUC  Нужны примеры            Разр
+                                                  CESS"} /      ответов, которые можно   абот
+ответа             (stub):                        TIMEOUT       считать ожидаемыми.      чик
+                                                                Например:
+тестируемого { "code": "SUCCESS" }                              getProcessParams=SUC
+                                                                CESS; HTTP 200/201;
+метода             // message = null                            result=SUCCESS.
+                                                                Источник: *WorkerIT +
+сервиса                                                         stubs/ump/
+                                                                ump_application_respons
+                   При ошибке маппера:                          e_200.json.
+
+                   { "code": "ERROR", "message":
+
+                   "<text>" }
+
+                   get-application-data:
+                   getProcessParams = SUCCESS |
+                   ERROR
+                   (+ fullName, productId, inn,
+                   contractNumber,
+                   insurancePremium,
+                   debitAccount)
+
+                   Timeout event sub-process
+                   (PT15M): timeoutMessage =
+                   "TIMEOUT"
+
+                   HTTP EQ в develop нет —
+                   негативы 4xx/5xx пока не
+                   применимы.
+
+8 Изменяемые       Stub ничего не пишет. UMP DB нет             Перечислить поля/        Разр
+     данные в                                                   таблицы/ресурсы,         абот
+     рамках        не меняется этим воркером.     изменений     которые создаются/       чик
+     работы                                                     перезаписываются
+     метода                                                     (кроме логирования).
+
+9 Скрипт,          Нет необходимости              —             Опционально. Скрипт      Разр
+
+содержащий                                                      готовит разработчик      абот
+
+сопутствующи                                                    только однажды перед чик
+
+е изменения в                                                   боем.
+
+БД (миграция)
+
+1 Заглушки для     Hold/create уже stub в коде.   PaymentServ   Для зависимостей,        Разр
+0 внешних          paymentFinished — подложить    ice stub      которые нужно/можно      абот
+                   Zeebe/Kafka message                          глушить — прикрепить     чик
+     зависимостей  (corr=businessKey).                          моки.
+
+1 Ожидаемое        Stub ~0; message 0–30с запас.  мгновенно     Потребуется для          Разр
+1 время отклика                                                 имитации нагрузки на     абот
+                                                                внешние зависимости.     чик
+     замоканных
+     внешних
+     зависимостей
+
+                                                     2. Полная информация для проведения НТ – 8
+                                          UMP – НТ пререквизиты - Worker ump-payment-ncins-pa
+
+1 Сценарий      1) Success: get→set-      IT:           Опционально. Готовит  Ана
+2 тестирования  hold→create-              InsurancePay  аналитик, если        лити
+                payment→paymentFinished.  mentWorkerI   тестируется бизнес-   к
+                2) Timeout PT15M без      T             процесс, а не метод.
+                message.
+                После реальной EQ —
+                обновить контракты.
+
+                                          2. Полная информация для проведения НТ – 9
+                             UMP – НТ пререквизиты - Worker ump-payment-ncins-pa
+
+3 3. Методы и примеры (код)
+
+Метод /    Где       Полный REQUEST (headers +      Полный RESPONSE             Источник
+                     body)                          (status + body)
+JobWorker
+
+1 get-     Applica   GET /applications/6dc5daf3-    HTTP/1.1 200 OK             ApplicationDa
+                     da12-4aae-9766-572da7b6b003?   Content-Type:               taWorkerIT
+application tionDat  include=PARTICIPANT&include=   application/json            stubs/ump/
+                     PRODUCT HTTP/1.1                                           ump_applicati
+-data      aWorke    Host: ump-application-         {                           on_response_
+                     facade.ump.svc.cluster.local                               200.json
+GET /      r         Accept: application/json       "externalApplicationIds":
+                                                    [
+application все      (без body)
+                                                      {
+s/{id}     процес    Camunda job input:                 "extAppId":
+                     {                              "7ca85f64-5717-4562-
+           сы         "businessKey": "6dc5daf3-     b3fc-6c163f65aba9",
+                     da12-4aae-9766-572da7b6b003",      "systemCode": "SFA",
+                      "processType":                    "extAppCreateDate":
+                     "<PREPARE_DOCUMENTS|           "2026-06-25T12:45:34.78
+                     SIGNING|PAYMENT|               5179Z"
+                     FINALISATION|DELETE_DOCS>"       }
+                     }                               ],
+                                                     "channels": [
+                                                      {
+                                                        "id":
+                                                    "bd458000-77c2-48af-91
+                                                    b4-815f7ef2d4e6",
+                                                        "userInfo": {
+                                                         "userId": "f6753df0-
+                                                    b5c9-4828-a7b7-
+                                                    f9f3f7d8f33c",
+                                                         "login": "service-
+                                                    account-nib-corp-ncins"
+                                                        },
+                                                        "code": "nib-corp-
+                                                    ncins",
+                                                        "name": "НИБ.
+                                                    Страхование",
+                                                        "isDeleted": false,
+                                                        "category": "RECEIVE",
+                                                        "type":
+                                                    "BANK_SYSTEM"
+                                                      }
+                                                     ],
+                                                     "participants": [
+                                                      {
+                                                        "id": "bdec62a5-
+                                                    e10a-4c5b-86c7-
+                                                    b5ac190b8055",
+                                                        "applicationId":
+                                                    "6dc5daf3-
+                                                    da12-4aae-9766-572da7
+                                                    b6b003",
+                                                        "isDeleted": false,
+                                                        "contacts": [
+                                                         {
+
+                                                    3. Методы и примеры (код) – 10
+1. http://rambler.ru  UMP – НТ пререквизиты - Worker ump-payment-ncins-pa
+
+                                      "type": "EMAIL",
+                                      "typeName":
+                               "Email",
+                                      "value":
+                               "romashka@rambler.ru1",
+                                      "isPrimary": false
+                                     },
+                                     {
+                                      "type": "PHONE",
+                                      "typeName":
+                               "Телефон",
+                                      "value":
+                               "79183221488",
+                                      "isPrimary": false
+                                     }
+                                   ],
+                                   "addresses": [
+                                     {
+                                      "type": "FACT",
+                                      "typeName":
+                               "Адрес проживания /
+                               фактический - краткий",
+                                      "address": {
+                                        "fullAddress": "Г.
+                               Пушкино ул.
+                               Колотушкина д. 14/88"
+                                      }
+                                     }
+                                   ],
+                                   "identityDocuments":
+                               [],
+                                   "okveds": [],
+                                   "licenses": [],
+                                   "management": [],
+                                   "founders": [],
+                                   "externalPins": [],
+                                   "pin": "AAAXYX",
+                                   "type": "LEGAL",
+                                   "typeName":
+                               "Юридическое лицо",
+                                   "fullName": "ООО
+                               Звезда",
+                                   "inn": "7826688577",
+                                   "createDate":
+                               "2026-07-09T17:19:18.96
+                               3685Z",
+                                   "lastUpdateDate":
+                               "2026-07-09T17:19:19.99
+                               786Z",
+                                   "citizenship":
+                               "Россия",
+                                   "citizenshipCode":
+                               "RU",
+                                   "taxCountryCode":
+                               "RU",
+                                   "ogrn":
+                               "1027810281740"
+
+                                                     3. Методы и примеры (код) – 11
+UMP – НТ пререквизиты - Worker ump-payment-ncins-pa
+
+            }
+          ],
+          "products": [
+            {
+
+             "id":
+         "3d9fe175-2bc5-442a-
+         b900-48522551de3f",
+
+             "applicationId":
+         "6dc5daf3-
+         da12-4aae-9766-572da7
+         b6b003",
+
+             "status": {
+               "isTerminate": true,
+               "code":
+         "COMPLETE",
+               "name": "Завершен"
+             },
+             "stage": {
+               "code":
+         "PAYMENT_COMPLETED
+         ",
+               "name":
+         "PAYMENT_COMPLETED
+         "
+             },
+             "createDate":
+         "2026-07-09T17:19:18.89
+         1861Z",
+             "lastUpdateDate":
+         "2026-07-09T17:23:50.60
+         0316Z",
+             "code":
+         "NON_CREDIT_INSURAN
+         CE",
+             "name":
+         "Некредитное
+         страхование ЮЛ",
+             "type": "PRODUCT",
+             "main": false,
+             "isDeleted": false,
+
+         "responsibleManager": {
+               "login": "U_M13RU"
+             },
+             "salesChannel": {
+               "code": "SFA",
+               "name": "SFA"
+             },
+             "productProperties": {
+               "programId":
+
+         1073741824,
+               "beginDate":
+
+         "2026-06-25T11:47:13.57
+         Z",
+
+               "endDate":
+         "2026-06-25T11:47:13.57
+         Z",
+
+               "signDate":
+         "2026-06-25T11:47:13.57
+         Z",
+
+                               3. Методы и примеры (код) – 12
+UMP – НТ пререквизиты - Worker ump-payment-ncins-pa
+
+               "duration": 12,
+               "insuranceSum":
+         20000.0,
+
+         "insurancePremium":
+         20000.0,
+
+               "contractNumber":
+         "1423423/sdf/123",
+
+               "paymentType":
+         "payment_account",
+
+               "agreementLink":
+         "7ca85f64-5717-4562-
+         b3fc-6c163f65aba9",
+
+               "insuranceObjects": [
+                {
+
+         "paymentAccount":
+         "123523464567347"
+
+                }
+               ],
+               "code":
+         "NON_CREDIT_INSURAN
+         CE"
+             },
+             "channelCode": "nib-
+         corp-ncins"
+            }
+          ],
+          "options": [],
+          "id": "6dc5daf3-
+         da12-4aae-9766-572da7
+         b6b003",
+          "createDate":
+         "2026-07-09T17:19:18.83
+         3504Z",
+          "lastUpdateDate":
+         "2026-07-09T17:22:46.46
+         2517Z",
+          "number":
+         "UMP26070994592",
+          "statusCode":
+         "COMPLETE",
+          "statusName":
+         "Завершена",
+          "finalVersion": true,
+          "isDeleted": false
+         }
+
+         Camunda job output
+         (успех):
+         { "getProcessParams":
+         "SUCCESS", ...поля по
+         processType из
+         ApplicationMapper }
+
+         Ошибка:
+         { "getProcessParams":
+         "ERROR" }
+
+                               3. Методы и примеры (код) – 13
+                                                        UMP – НТ пререквизиты - Worker ump-payment-ncins-pa
+
+4 ump-           Insuran JobWorker: ump-payment-ncins- Camunda output:           InsurancePay
+                                                                                 mentWorkerIT
+payment- cePaym pa.set-hold                               {                      PaymentServi
+                                                                                 ce stub
+ncins-           entWor HTTP: нет (PaymentService            "code": "SUCCESS"
+
+pa.set-hold ker           TODO stub)                      }
+
+STUB (нет paymen                                          // message = null
+
+HTTP)            t        Camunda input
+
+                          (InsurancePaymentWorkerIT):     Ошибка:
+
+                          {                               { "code": "ERROR",
+
+                             "businessKey": "550e8400-    "message": "<text>" }
+
+                          e29b-41d4-a716-446655110003",
+
+                             "productCode":
+
+                          "NON_CREDIT_INSURANCE",
+
+                             "systemCode": "SFA"
+
+                          }
+
+5 ump-           Insuran  JobWorker: ump-payment-ncins-   Camunda output:        InsurancePay
+     payment-    cePaym   pa.create-payment               {                      mentWorkerIT
+     ncins-      entWor   HTTP: нет (PaymentService        "code": "SUCCESS"     PaymentServi
+     pa.create-  ker      TODO stub)                      }                      ce stub
+     payment     paymen                                   // message = null
+     STUB (нет   t        Camunda input: тот же Map, что
+     HTTP)                для set-hold (см. выше).        Ошибка:
+                                                          { "code": "ERROR",
+                                                          "message": "<text>" }
+
+4 message        Zeebe    correlationKey = businessKey    Продолжение            BPMN ump-
+     paymentFi   receive  (develop BPMN)                  процесса / End.        payment-
+     nished      paymen   Полный JSON payload             Timeout PT15M →        ncins-pa
+                 t        сообщения — TBD (в репе нет;    timeoutMessage=TIMEO
+                          добыть на стенде).              UT
+                          Минимально для НТ:
+                          опубликовать completion с corr
+                          = businessKey.
+
+                                                                   3. Методы и примеры (код) – 14
+
